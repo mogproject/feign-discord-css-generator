@@ -1,30 +1,33 @@
 import React from "react";
 import { useState } from "react";
 import Header from "./components/Header";
-import { Container, InputGroup, Form, Accordion } from "react-bootstrap";
-import { DiscordUser, ConfContext } from "./components/Context";
+import { Container, Accordion } from "react-bootstrap";
+import { DiscordUser, ConfContext, defaultConf, ViewSettings, FeiSettings, AvatarSettings, UsernameSettings } from "./components/Context";
 import { DiscordUsers } from "./components/DiscordUsers";
 import { FeignPlayers } from "./components/FeignPlayers";
 import { Preview } from "./components/Preview";
 import { buildCSS } from "./components/CSSBuilder";
 import { buildFeignImageCSS } from "./components/FeignImageCSS";
 import { OBSSettings } from "./components/OBSSettings";
+import { DiscordVoiceChannel } from "./components/DiscordVoiceChannel";
+import { ViewSettingsPane } from "./components/ViewSettingsPane";
 
 function retrieveIDs(voiceChannelURL: string): [string, string] {
-  const result = voiceChannelURL.match(/http[s]?:[/][/]discord.com[/]channels[/](\d+)[/](\d+)[/]?/);
+  const result = voiceChannelURL.match(/^http[s]?:[/][/]discord.com[/]channels[/](\d+)[/](\d+)[/]?$/);
   return result ? [result[1], result[2]] : ["", ""];
 }
 
 export default function App() {
+  // Load settings.
   const initialVoiceChannelURL: string = localStorage.getItem("voice_channel_url") || "";
   const [voiceChannelURL, setVoiceChannelURL] = useState(initialVoiceChannelURL);
   const [serverID, channelID] = retrieveIDs(voiceChannelURL);
 
-  function handleVoiceChannelURL(e: React.ChangeEvent<HTMLInputElement>) {
-    const newValue = e.target.value;
-    localStorage.setItem("voice_channel_url", newValue);
-    setVoiceChannelURL(newValue);
+  function updateVoiceChannelURL(newURL: string) {
+    localStorage.setItem("voice_channel_url", newURL);
+    setVoiceChannelURL(newURL);
   }
+
   const initialDiscordUsers: DiscordUser[] = JSON.parse(localStorage.getItem("discord_users") || "[]");
   const [discordUsers, setDiscordUsers] = React.useState(initialDiscordUsers);
 
@@ -41,6 +44,31 @@ export default function App() {
     localStorage.setItem("feign_players", JSON.stringify(newFeignPlayers));
   }
 
+  const initialFeiSettings = { ...defaultConf.viewSettings.fei, ...JSON.parse(localStorage.getItem("view_fei") || "{}") };
+  const initialAvatarSettings = { ...defaultConf.viewSettings.avatar, ...JSON.parse(localStorage.getItem("view_avatar") || "{}") };
+  const initialUsernameSettings = { ...defaultConf.viewSettings.username, ...JSON.parse(localStorage.getItem("view_username") || "{}") };
+
+  const [feiSettings, setFeiSettings] = React.useState(initialFeiSettings);
+  const [avatarSettings, setAvatarSettings] = React.useState(initialAvatarSettings);
+  const [usernameSettings, setUsernameSettings] = React.useState(initialUsernameSettings);
+
+  function updateFeiSettings(newSettings: FeiSettings) {
+    setFeiSettings(newSettings);
+    localStorage.setItem("view_fei", JSON.stringify(newSettings));
+  }
+
+  function updateAvatarSettings(newSettings: AvatarSettings) {
+    setAvatarSettings(newSettings);
+    localStorage.setItem("view_avatar", JSON.stringify(newSettings));
+  }
+
+  function updateUsernameSettings(newSettings: UsernameSettings) {
+    setUsernameSettings(newSettings);
+    localStorage.setItem("view_username", JSON.stringify(newSettings));
+  }
+
+  const viewSettings = { fei: feiSettings, avatar: avatarSettings, username: usernameSettings };
+
   return (
     <>
       <Header />
@@ -49,10 +77,15 @@ export default function App() {
           channelURL: voiceChannelURL,
           serverID: serverID,
           channelID: channelID,
+          updateVoiceChannelURL: updateVoiceChannelURL,
           discordUsers: discordUsers,
           updateDiscordUsers: updateDiscordUsers,
           feignPlayers: feignPlayers,
           updateFeignPlayers: updateFeignPlayers,
+          viewSettings: viewSettings,
+          updateFeiSettings: updateFeiSettings,
+          updateAvatarSettings: updateAvatarSettings,
+          updateUsernameSettings: updateUsernameSettings,
         }}
       >
         <Container style={{ paddingTop: "5px" }}>
@@ -70,19 +103,7 @@ export default function App() {
             <Accordion.Item eventKey="0">
               <Accordion.Header>Discord ボイスチャンネル</Accordion.Header>
               <Accordion.Body>
-                <Container>
-                  <p>Discord を起動し、対象のボイスチャンネルを右クリック → 「リンクをコピー」を選択。以下のフォームに貼り付けてください。</p>
-                  <InputGroup size="sm">
-                    <InputGroup.Text id="voice-channel-url">URL</InputGroup.Text>
-                    <Form.Control
-                      area-label="voice-channel-url-label"
-                      area-aria-describedby="voice-channel-url"
-                      value={voiceChannelURL}
-                      onChange={handleVoiceChannelURL}
-                      style={{ maxWidth: "540px" }}
-                    />
-                  </InputGroup>
-                </Container>
+                <DiscordVoiceChannel />
               </Accordion.Body>
             </Accordion.Item>
 
@@ -102,17 +123,18 @@ export default function App() {
 
             <Accordion.Item eventKey="3">
               <Accordion.Header>オーバーレイ詳細設定</Accordion.Header>
-              <Accordion.Body></Accordion.Body>
+              <Accordion.Body>
+                <ViewSettingsPane />
+              </Accordion.Body>
             </Accordion.Item>
           </Accordion>
           <h2>プレビュー</h2>
-          <p>アイコンをクリックすると会話状態が切り替わります。</p>
           <Preview />
           <h2>OBS 設定</h2>
           <OBSSettings />
         </Container>
       </ConfContext.Provider>
-      <style>{buildCSS(feignPlayers)}</style>
+      <style>{buildCSS(feignPlayers, viewSettings)}</style>
       <style>{buildFeignImageCSS()}</style>
     </>
   );
