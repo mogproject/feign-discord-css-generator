@@ -1,8 +1,8 @@
 import React from "react";
 import { Container, Row, Col, InputGroup, Form, Alert } from "react-bootstrap";
-import { ConfContext } from "../models/Context";
-import { buildCSS } from "../models/CSSBuilder";
-import { buildFeignImageCSS } from "../models/FeignImageCSS";
+import { ConfContext } from "../../models/Context";
+import { buildCSS } from "../../models/CSSBuilder";
+import { buildFeignImageCSS } from "../../models/FeignImageCSS";
 import { CopyButton } from "../buttons/CopyButton";
 import SaveFileButton from "../buttons/SaveFileButton";
 

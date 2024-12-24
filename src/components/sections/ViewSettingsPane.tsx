@@ -1,6 +1,6 @@
 import React from "react";
 import { Accordion, Button, Col, Container, Form, InputGroup, Modal, Row } from "react-bootstrap";
-import { AnimationSettings, AvatarShape, ConfContext, defaultConf } from "../models/Context";
+import { AnimationSettings, AvatarShape, ConfContext, defaultConf } from "../../models/Context";
 import { RadioButtonGroup } from "../buttons/RadioButtonGroup";
 import { ColorPicker } from "../buttons/ColorPicker";
 import { AnimationSettingButtonGroup } from "../buttons/AnimationSettingButtonGroup";

@@ -1,6 +1,6 @@
 import React from "react";
 import { ButtonGroup, Form, InputGroup } from "react-bootstrap";
-import { AnimationSettings } from "../models/Context";
+import { AnimationSettings } from "../../models/Context";
 import { ColorPicker } from "./ColorPicker";
 
 export function AnimationSettingButtonGroup(

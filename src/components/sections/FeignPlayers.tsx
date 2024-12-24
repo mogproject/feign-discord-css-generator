@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import { ConfContext, DiscordUser, FEI_COLORS } from "../models/Context";
+import { ConfContext, DiscordUser, FEI_COLORS } from "../../models/Context";
 import Form from "react-bootstrap/Form";
 
 const COLOR_DESCRIPTION: string[] = ["白", "薄橙", "紫", "緑", "青", "赤", "黄色", "黄緑", "水色", "薄桃", "茶色", "濃桃", "濃橙"];
@@ -13,8 +13,8 @@ export function FeignPlayers() {
     const targetID = target >= 0 ? discordUsers[target].id : "";
 
     const newPlayers = feignPlayers.map((user, i) => {
-      if (i == color) return targetID;  // data to update
-      if (user == targetID) return '';  // the same ID is already used for another color
+      if (i === color) return targetID;  // data to update
+      if (user === targetID) return '';  // the same ID is already used for another color
       return user;
     });
     updateFeignPlayers(newPlayers);

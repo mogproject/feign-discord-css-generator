@@ -3,8 +3,6 @@ import { Button } from "react-bootstrap";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-// TODO: Add tooltip and success notification
-
 function SaveFileButton(content: string, label: string, suggestedName: string, variant: string = "") {
   async function handleSave() {
     const ext = suggestedName.split(".").pop()?.toLowerCase();

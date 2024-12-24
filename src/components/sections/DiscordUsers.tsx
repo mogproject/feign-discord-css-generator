@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { Container, Row, Col, InputGroup, Form, Button, Modal } from "react-bootstrap";
-import { DiscordUser, ConfContext } from "../models/Context";
+import { DiscordUser, ConfContext } from "../../models/Context";
 
 export function DiscordUsers() {
   const { discordUsers, updateDiscordUsers } = React.useContext(ConfContext);
