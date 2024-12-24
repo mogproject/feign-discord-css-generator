@@ -1,4 +1,5 @@
 import React from "react";
+import { AvatarSettings, AvatarShape, FeiSettings, UsernameSettings, ViewSettings } from "./ViewSettings";
 
 export const APP_VERSION = '0.0.1'
 
@@ -39,47 +40,6 @@ export const FEI_COLORS: string[] = [
   "orange",
 ];
 
-export enum AvatarShape {
-  Circle,
-  RoundedRectangle,
-  Rectangle,
-}
-
-export interface AnimationSettings {
-  jump: boolean;
-  flash: boolean;
-  flashColor: string;
-  outline: boolean;
-  outlineColor: string;
-}
-
-export interface FeiSettings {
-  mirror: boolean;
-  speaking: AnimationSettings;
-  interval: number; // additional horizontal margin
-}
-
-export interface AvatarSettings {
-  show: boolean;
-  shape: AvatarShape;
-  speaking: AnimationSettings;
-  offsetY: number;
-}
-
-export interface UsernameSettings {
-  show: boolean;
-  fontSize: number;
-  fontColor: string;
-  backgroundColor: string;
-  offsetY: number;
-}
-
-export interface ViewSettings {
-  fei: FeiSettings;
-  avatar: AvatarSettings;
-  username: UsernameSettings;
-}
-
 interface Configuration {
   channelURL: string;
   serverID: string;
@@ -95,50 +55,52 @@ interface Configuration {
   updateUsernameSettings: (settings: UsernameSettings) => void;
 }
 
+const defaultFeiSettings: FeiSettings = {
+  mirror: true,
+  speaking: {
+    jump: true,
+    flash: true,
+    flashColor: "#ffffff",
+    outline: false,
+    outlineColor: "#3ba53b",
+  },
+  interval: 0,
+};
+
+const defaultAvatarSettings: AvatarSettings = {
+  show: true,
+  shape: AvatarShape.Circle,
+  speaking: {
+    jump: false,
+    flash: false,
+    flashColor: "#ffffff",
+    outline: true,
+    outlineColor: "#3ba53b",
+  },
+  offsetY: 0,
+};
+
+const defaultUsernameSettings: UsernameSettings = {
+  show: true,
+  fontSize: 20,
+  fontColor: "#ffffff",
+  backgroundColor: "#1e2124",
+  offsetY: 0,
+};
+
 export const defaultConf = {
   channelURL: "",
   serverID: "",
   channelID: "",
-  updateVoiceChannelURL: () => {},
+  updateVoiceChannelURL: () => { },
   discordUsers: [],
-  updateDiscordUsers: () => {},
+  updateDiscordUsers: () => { },
   feignPlayers: Array(13).fill(""),
-  updateFeignPlayers: () => {},
-  viewSettings: {
-    fei: {
-      mirror: true,
-      speaking: {
-        jump: true,
-        flash: true,
-        flashColor: "#ffffff",
-        outline: false,
-        outlineColor: "#3ba53b",
-      },
-      interval: 0,
-    },
-    avatar: {
-      show: true,
-      shape: AvatarShape.Circle,
-      speaking: {
-        jump: false,
-        flash: false,
-        flashColor: "#ffffff",
-        outline: true,
-        outlineColor: "#3ba53b",
-      },
-      offsetY: 0,
-    },
-    username: {
-      show: true,
-      fontSize: 20,
-      fontColor: "#ffffff",
-      backgroundColor: "#1e2124",
-      offsetY: 0,
-    },
-  },
-  updateFeiSettings: () => {},
-  updateAvatarSettings: () => {},
-  updateUsernameSettings: () => {},
+  updateFeignPlayers: () => { },
+  viewSettings: new ViewSettings(defaultFeiSettings, defaultAvatarSettings, defaultUsernameSettings),
+  updateFeiSettings: () => { },
+  updateAvatarSettings: () => { },
+  updateUsernameSettings: () => { },
 };
 
 // Create a global context.

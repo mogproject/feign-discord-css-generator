@@ -1,4 +1,5 @@
-import { FEI_COLORS, ViewSettings, AvatarShape, AnimationSettings, APP_VERSION } from "./Context";
+import { ViewSettings, AvatarShape, AnimationSettings } from './ViewSettings';
+import { FEI_COLORS, APP_VERSION } from "./Context";
 
 function hex2rgba(hex: string, alpha: number): string {
   if (hex.length !== 7 || !hex.startsWith("#")) return hex;
@@ -32,10 +33,7 @@ const glowFilter = (x: number, c: string) => {
 };
 
 export function buildCSS(feignPlayers: string[], settings: ViewSettings): string {
-  const feiWidth = 134;
-  const feiHeight = 200;
-  const avatarMarginTop = -132 + settings.avatar.offsetY;
-  const usernameMarginTop = -40 + settings.username.offsetY;
+  const avatarBorderWidth = 5;
   const glowAmount = 6;
 
   const now = new Date().toISOString();
@@ -48,15 +46,15 @@ export function buildCSS(feignPlayers: string[], settings: ViewSettings): string
         // Character
         `.voice_state[data-userid="${id}"]::before  {`,
         `  background-image: var(--feign-icon-${FEI_COLORS[i]});`,
-        `  background-size: ${feiWidth}px ${feiHeight}px;`,
+        `  background-size: ${settings.getFeiWidth()}px ${settings.getFeiHeight()}px;`,
         "  display: inline-block;",
         '  content: "";',
-        `  width: ${feiWidth}px;`,
-        `  height: ${feiHeight}px;`,
+        `  width: ${settings.getFeiWidth()}px;`,
+        `  height: ${settings.getFeiHeight()}px;`,
         "  border-radius: 0;",
         "  filter: brightness(65%);",
         "  text-align: center;",
-        "  margin-top: 40px;",
+        `  margin-top: ${settings.getFeiMarginTop()}px;`,
         "  position: relative;",
         "  top: 0px;",
         settings.fei.mirror ? "  -webkit-transform: scaleX(-1);" : "",
@@ -110,11 +108,11 @@ export function buildCSS(feignPlayers: string[], settings: ViewSettings): string
     // Avatar image
     ".voice_avatar {",
     settings.avatar.show ? "" : "display: none;",
-    `  margin: ${avatarMarginTop}px auto 0px auto;`,
-    "  width: 120px;",
-    "  height: 120px;",
+    `  margin: ${settings.getAvatarMarginTop()}px auto 0px auto;`,
+    `  width: ${settings.getAvatarWidth()}px;`,
+    `  height: ${settings.getAvatarHeight()}px;`,
     `  border-radius: ${avatarRadius}%;`,
-    "  border-width: 5px;",
+    `  border-width: ${avatarBorderWidth}px;`,
     "  filter: brightness(35%);",
     "  position: relative;",
     "  top: 0px;",
@@ -130,14 +128,17 @@ export function buildCSS(feignPlayers: string[], settings: ViewSettings): string
     // User name
     ".voice_username {",
     settings.username.show ? "" : "display: none;",
+    `  height: ${settings.getUsernameHeight()}px;`,
+    `  margin: ${settings.getUsernameMarginTop()}px 0 ${settings.getUsernameMarginBottom()}px 0;`,
+    '  padding: 0;',
     "}",
     '[class*="Voice_name__"] {',
     `  font-size: ${settings.username.fontSize}px !important;`,
     `  color: ${settings.username.fontColor} !important;`,
     `  background-color: ${hex2rgba(settings.username.backgroundColor, usernameOpacity)} !important;`,
-    "  height: 36px;",
-    "  width: 126px;", // 134 - 8
-    `  margin: ${usernameMarginTop}px auto 0px auto;`,
+    "  height: 100%;",
+    `  width: ${settings.getUsernameWidth()}px;`,
+    `  margin: 0 auto 0px auto;`,
     "  padding: 10px 0px 0px 0px;",
     "  box-sizing: border-box;",
     "  text-overflow: clip;",
