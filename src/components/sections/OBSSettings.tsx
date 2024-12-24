@@ -3,6 +3,7 @@ import { Container, Row, Col, InputGroup, Form, Alert } from "react-bootstrap";
 import { ConfContext } from "../../models/Context";
 import { buildCSS } from "../../models/CSSBuilder";
 import { buildFeignImageCSS } from "../../models/FeignImageCSS";
+import { ViewSettings } from "../../models/ViewSettings";
 import { CopyButton } from "../buttons/CopyButton";
 import SaveFileButton from "../buttons/SaveFileButton";
 
@@ -21,7 +22,9 @@ export function OBSSettings() {
 
   const obsURL = `https://streamkit.discord.com/overlay/voice/${serverID}/${channelID}`;
   const obsWidth = 1772 + viewSettings.fei.interval * 12;  // should support up to 13 users
-  const obsHeight = 260 + Math.max(0, viewSettings.avatar.offsetY) + Math.max(0, viewSettings.username.offsetY);
+  const obsHeight = viewSettings.getHeight();
+  
+  // 260 + Math.max(0, viewSettings.avatar.offsetY) + Math.max(0, viewSettings.username.offsetY);
 
   return (
     <Container className="mb-4">

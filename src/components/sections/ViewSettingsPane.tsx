@@ -1,6 +1,7 @@
 import React from "react";
 import { Accordion, Button, Col, Container, Form, InputGroup, Modal, Row } from "react-bootstrap";
-import { AnimationSettings, AvatarShape, ConfContext, defaultConf } from "../../models/Context";
+import { AnimationSettings, AvatarShape } from '../../models/ViewSettings'
+import { ConfContext, defaultConf } from "../../models/Context";
 import { RadioButtonGroup } from "../buttons/RadioButtonGroup";
 import { ColorPicker } from "../buttons/ColorPicker";
 import { AnimationSettingButtonGroup } from "../buttons/AnimationSettingButtonGroup";
@@ -91,6 +92,18 @@ export function ViewSettingsPane() {
                     />
                   </Form.Check>
                 </Col>
+
+                <Col className="offset-md-1 col-md-2 text-end">前面に表示</Col>
+                <Col className="col-md-2">
+                  <Form.Check className="form-switch">
+                    <Form.Check.Input
+                      type='checkbox'
+                      role='switch'
+                      checked={viewSettings.avatar.front}
+                      onChange={() => updateAvatarSettings({ ...viewSettings.avatar, front: !viewSettings.avatar.front })}
+                    />
+                  </Form.Check>
+                </Col>
               </Row>
 
               <Row className="mb-2">
@@ -110,8 +123,8 @@ export function ViewSettingsPane() {
                   <Form.Control
                     type="number"
                     value={viewSettings.avatar.offsetY}
-                    min="-70"
-                    max="150"
+                    min="-300"
+                    max="300"
                     style={{ width: "80px" }}
                     onChange={(e) => {
                       updateAvatarSettings({ ...viewSettings.avatar, offsetY: parseInt(e.target.value) });
@@ -179,8 +192,8 @@ export function ViewSettingsPane() {
                   <Form.Control
                     type="number"
                     value={viewSettings.username.offsetY}
-                    min="-70"
-                    max="150"
+                    min="-300"
+                    max="300"
                     style={{ width: "80px" }}
                     onChange={(e) => {
                       updateUsernameSettings({ ...viewSettings.username, offsetY: parseInt(e.target.value) });

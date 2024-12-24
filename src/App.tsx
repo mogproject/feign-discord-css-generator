@@ -2,7 +2,8 @@ import React from "react";
 import { useState } from "react";
 import Header from "./components/Header";
 import { Container, Accordion } from "react-bootstrap";
-import { DiscordUser, ConfContext, defaultConf, FeiSettings, AvatarSettings, UsernameSettings } from "./models/Context";
+import { FeiSettings, AvatarSettings, UsernameSettings, ViewSettings } from './models/ViewSettings';
+import { DiscordUser, ConfContext, defaultConf } from "./models/Context";
 import { DiscordUsers } from "./components/sections/DiscordUsers";
 import { FeignPlayers } from "./components/sections/FeignPlayers";
 import { Preview } from "./components/sections/Preview";
@@ -67,7 +68,7 @@ export default function App() {
     localStorage.setItem("view_username", JSON.stringify(newSettings));
   }
 
-  const viewSettings = { fei: feiSettings, avatar: avatarSettings, username: usernameSettings };
+  const viewSettings = new ViewSettings(feiSettings, avatarSettings, usernameSettings);
 
   return (
     <>
