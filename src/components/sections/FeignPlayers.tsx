@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import { ConfContext, DiscordUser, FEI_COLORS } from "./Context";
+import { ConfContext, DiscordUser, FEI_COLORS } from "../../models/Context";
 import Form from "react-bootstrap/Form";
 
 const COLOR_DESCRIPTION: string[] = ["白", "薄橙", "紫", "緑", "青", "赤", "黄色", "黄緑", "水色", "薄桃", "茶色", "濃桃", "濃橙"];
@@ -11,7 +11,13 @@ export function FeignPlayers() {
   function handleUpdate(color: number, targetIndex: string) {
     const target = parseInt(targetIndex);
     const targetID = target >= 0 ? discordUsers[target].id : "";
-    updateFeignPlayers([...feignPlayers.slice(0, color), targetID, ...feignPlayers.slice(color + 1)]);
+
+    const newPlayers = feignPlayers.map((user, i) => {
+      if (i === color) return targetID;  // data to update
+      if (user === targetID) return '';  // the same ID is already used for another color
+      return user;
+    });
+    updateFeignPlayers(newPlayers);
   }
 
   function FeignPlayer(color: number) {
@@ -24,7 +30,9 @@ export function FeignPlayers() {
           <img src={`assets/img/${FEI_COLORS[color]}-small.png`} width="80px" style={{ maxWidth: "80px" }} alt=""></img>
         </Row>
         <Row className="justify-content-md-center" style={{ marginTop: "-45px" }}>
-          <Form.Select onChange={(e) => handleUpdate(color, e.target.value)} size="sm" style={{ width: "90%" }}>
+          <Form.Select onChange={(e) => handleUpdate(color, e.target.value)} size="sm"
+            className={targetIndex < 0 ? 'bg-secondary' : ''}
+            style={{ width: "90%" }}>
             <option selected={targetIndex < 0} value="-1">
               ----
             </option>

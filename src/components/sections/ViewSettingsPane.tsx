@@ -1,9 +1,9 @@
 import React from "react";
 import { Accordion, Button, Col, Container, Form, InputGroup, Modal, Row } from "react-bootstrap";
-import { AnimationSettings, AvatarShape, ConfContext, defaultConf } from "./Context";
-import { RadioButtonGroup } from "./buttons/RadioButtonGroup";
-import { ColorPicker } from "./buttons/ColorPicker";
-import { AnimationSettingButtonGroup } from "./buttons/AnimationSettingButtonGroup";
+import { AnimationSettings, AvatarShape, ConfContext, defaultConf } from "../../models/Context";
+import { RadioButtonGroup } from "../buttons/RadioButtonGroup";
+import { ColorPicker } from "../buttons/ColorPicker";
+import { AnimationSettingButtonGroup } from "../buttons/AnimationSettingButtonGroup";
 
 export function ViewSettingsPane() {
   const { viewSettings, updateFeiSettings, updateAvatarSettings, updateUsernameSettings } = React.useContext(ConfContext);

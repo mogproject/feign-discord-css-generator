@@ -2,15 +2,15 @@ import React from "react";
 import { useState } from "react";
 import Header from "./components/Header";
 import { Container, Accordion } from "react-bootstrap";
-import { DiscordUser, ConfContext, defaultConf, ViewSettings, FeiSettings, AvatarSettings, UsernameSettings } from "./components/Context";
-import { DiscordUsers } from "./components/DiscordUsers";
-import { FeignPlayers } from "./components/FeignPlayers";
-import { Preview } from "./components/Preview";
-import { buildCSS } from "./components/CSSBuilder";
-import { buildFeignImageCSS } from "./components/FeignImageCSS";
-import { OBSSettings } from "./components/OBSSettings";
-import { DiscordVoiceChannel } from "./components/DiscordVoiceChannel";
-import { ViewSettingsPane } from "./components/ViewSettingsPane";
+import { DiscordUser, ConfContext, defaultConf, FeiSettings, AvatarSettings, UsernameSettings } from "./models/Context";
+import { DiscordUsers } from "./components/sections/DiscordUsers";
+import { FeignPlayers } from "./components/sections/FeignPlayers";
+import { Preview } from "./components/sections/Preview";
+import { buildCSS } from "./models/CSSBuilder";
+import { buildFeignImageCSS } from "./models/FeignImageCSS";
+import { OBSSettings } from "./components/sections/OBSSettings";
+import { DiscordVoiceChannel } from "./components/sections/DiscordVoiceChannel";
+import { ViewSettingsPane } from "./components/sections/ViewSettingsPane";
 
 function retrieveIDs(voiceChannelURL: string): [string, string] {
   const result = voiceChannelURL.match(/^http[s]?:[/][/]discord.com[/]channels[/](\d+)[/](\d+)[/]?$/);

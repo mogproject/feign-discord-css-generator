@@ -1,13 +1,21 @@
 import React from "react";
 import { Container, Row, Col, InputGroup, Form, Alert } from "react-bootstrap";
-import { ConfContext } from "./Context";
-import { buildCSS } from "./CSSBuilder";
-import { buildFeignImageCSS } from "./FeignImageCSS";
-import { CopyButton } from "./buttons/CopyButton";
-import SaveFileButton from "./buttons/SaveFileButton";
+import { ConfContext } from "../../models/Context";
+import { buildCSS } from "../../models/CSSBuilder";
+import { buildFeignImageCSS } from "../../models/FeignImageCSS";
+import { CopyButton } from "../buttons/CopyButton";
+import SaveFileButton from "../buttons/SaveFileButton";
 
 export function OBSSettings() {
   const { feignPlayers, serverID, channelID, viewSettings } = React.useContext(ConfContext);
+
+  if (feignPlayers.every((user) => user === '')) {
+    return (
+      <Container className="mb-4">
+        <Alert className="alert-warning">Feign プレイヤーを追加してください。</Alert>
+      </Container>
+    )
+  }
 
   const content = buildCSS(feignPlayers, viewSettings) + "\n" + buildFeignImageCSS();
 
@@ -53,9 +61,9 @@ export function OBSSettings() {
               </InputGroup>
             </Col>
           </Row>
-          <Row className="'mb-4">
+          <Row className="mb-4">
             <Col>
-              <Alert className="alert-dark pt-1 pb-1 small">これらより大きい値を入力しても、動作に影響はありません。</Alert>
+              <small className="text-muted">これらより大きい値を入力しても、動作に影響はありません。</small>
             </Col>
           </Row>
 
