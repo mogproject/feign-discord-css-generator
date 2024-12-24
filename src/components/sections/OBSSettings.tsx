@@ -53,9 +53,9 @@ export function OBSSettings() {
               </InputGroup>
             </Col>
           </Row>
-          <Row className="'mb-4">
+          <Row className="mb-4">
             <Col>
-              <Alert className="alert-dark pt-1 pb-1 small">これらより大きい値を入力しても、動作に影響はありません。</Alert>
+              <small className="text-muted">これらより大きい値を入力しても、動作に影響はありません。</small>
             </Col>
           </Row>
 
