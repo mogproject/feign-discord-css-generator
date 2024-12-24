@@ -1,6 +1,6 @@
 import React from "react";
 import { Container } from "react-bootstrap";
-import { ConfContext, DiscordUser } from "./Context";
+import { ConfContext, DiscordUser } from "../models/Context";
 
 export function Preview() {
   const { discordUsers, feignPlayers } = React.useContext(ConfContext);

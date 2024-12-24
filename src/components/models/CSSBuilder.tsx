@@ -1,4 +1,4 @@
-import { FEI_COLORS, ViewSettings, AvatarShape, AnimationSettings } from "./Context";
+import { FEI_COLORS, ViewSettings, AvatarShape, AnimationSettings, APP_VERSION } from "./Context";
 
 function hex2rgba(hex: string, alpha: number): string {
   if (hex.length !== 7 || !hex.startsWith("#")) return hex;
@@ -38,59 +38,60 @@ export function buildCSS(feignPlayers: string[], settings: ViewSettings): string
   const usernameMarginTop = -40 + settings.username.offsetY;
   const glowAmount = 6;
 
-  const prefix = "/* CSS built on https://feign.mogproject.com */\n\n";
+  const now = new Date().toISOString();
+  const prefix = `/* CSS built on https://feign.mogproject.com (v${APP_VERSION}). ${now}. */\n\n`;
 
   const fei = feignPlayers.flatMap((id: string, i: number) =>
     id === ""
       ? []
       : [
-          // Character
-          `.voice_state[data-userid="${id}"]::before  {`,
-          `  background-image: var(--feign-icon-${FEI_COLORS[i]});`,
-          `  background-size: ${feiWidth}px ${feiHeight}px;`,
-          "  display: inline-block;",
-          '  content:"";',
-          `  width: ${feiWidth}px;`,
-          `  height: ${feiHeight}px;`,
-          "  border-radius: 0;",
-          "  filter: brightness(65%);",
-          "  text-align: center;",
-          "  margin-top: 40px;",
-          "  position: relative;",
-          "  top: 0px;",
-          settings.fei.mirror ? "  -webkit-transform: scaleX(-1);" : "",
-          settings.fei.mirror ? "  transform: scaleX(-1);" : "",
-          "}",
+        // Character
+        `.voice_state[data-userid="${id}"]::before  {`,
+        `  background-image: var(--feign-icon-${FEI_COLORS[i]});`,
+        `  background-size: ${feiWidth}px ${feiHeight}px;`,
+        "  display: inline-block;",
+        '  content: "";',
+        `  width: ${feiWidth}px;`,
+        `  height: ${feiHeight}px;`,
+        "  border-radius: 0;",
+        "  filter: brightness(65%);",
+        "  text-align: center;",
+        "  margin-top: 40px;",
+        "  position: relative;",
+        "  top: 0px;",
+        settings.fei.mirror ? "  -webkit-transform: scaleX(-1);" : "",
+        settings.fei.mirror ? "  transform: scaleX(-1);" : "",
+        "}",
 
-          // Animation
-          `.wrapper_speaking[data-userid="${id}"]::before  {`,
-          `  animation: ${animationString(settings.fei.speaking, "")};`,
-          "  animation-fill-mode: forwards;",
-          "  filter: brightness(100%);",
-          "}",
-        ]
+        // Animation
+        `.wrapper_speaking[data-userid="${id}"]::before  {`,
+        `  animation: ${animationString(settings.fei.speaking, "")};`,
+        "  animation-fill-mode: forwards;",
+        "  filter: brightness(100%);",
+        "}",
+      ]
   );
 
   const animJumpFei = settings.fei.speaking.jump ? ["@keyframes speak-jump { 0% {top: 0px;} 50% {top: -20px;} 100% {top: 0px;} }"] : [];
 
   const animFlashFei = settings.fei.speaking.flash
     ? [
-        "@keyframes speak-flash {",
-        `  0% {filter:${glowFilter(2, settings.fei.speaking.flashColor)};}`,
-        `  50% {filter:${glowFilter(glowAmount, settings.fei.speaking.flashColor)};}`,
-        `  100% {filter:${glowFilter(2, settings.fei.speaking.flashColor)};}`,
-        "}",
-      ]
+      "@keyframes speak-flash {",
+      `  0% {filter:${glowFilter(2, settings.fei.speaking.flashColor)};}`,
+      `  50% {filter:${glowFilter(glowAmount, settings.fei.speaking.flashColor)};}`,
+      `  100% {filter:${glowFilter(2, settings.fei.speaking.flashColor)};}`,
+      "}",
+    ]
     : [];
 
   const animFlashAvatar = settings.avatar.speaking.flash
     ? [
-        "@keyframes speak-avatar-flash {",
-        `  0% {filter:${glowFilter(2, settings.avatar.speaking.flashColor)};}`,
-        `  50% {filter:${glowFilter(glowAmount, settings.avatar.speaking.flashColor)};}`,
-        `  100% {filter:${glowFilter(2, settings.avatar.speaking.flashColor)};}`,
-        "}",
-      ]
+      "@keyframes speak-avatar-flash {",
+      `  0% {filter:${glowFilter(2, settings.avatar.speaking.flashColor)};}`,
+      `  50% {filter:${glowFilter(glowAmount, settings.avatar.speaking.flashColor)};}`,
+      `  100% {filter:${glowFilter(2, settings.avatar.speaking.flashColor)};}`,
+      "}",
+    ]
     : [];
 
   const animation = [...animJumpFei, ...animFlashFei, ...animFlashAvatar];

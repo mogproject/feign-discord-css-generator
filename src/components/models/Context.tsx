@@ -1,5 +1,7 @@
 import React from "react";
 
+export const APP_VERSION = '0.0.1'
+
 export interface DiscordUser {
   name: string;
   id: string;

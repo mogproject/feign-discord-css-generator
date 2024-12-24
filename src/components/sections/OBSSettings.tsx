@@ -1,10 +1,10 @@
 import React from "react";
 import { Container, Row, Col, InputGroup, Form, Alert } from "react-bootstrap";
-import { ConfContext } from "./Context";
-import { buildCSS } from "./CSSBuilder";
-import { buildFeignImageCSS } from "./FeignImageCSS";
-import { CopyButton } from "./buttons/CopyButton";
-import SaveFileButton from "./buttons/SaveFileButton";
+import { ConfContext } from "../models/Context";
+import { buildCSS } from "../models/CSSBuilder";
+import { buildFeignImageCSS } from "../models/FeignImageCSS";
+import { CopyButton } from "../buttons/CopyButton";
+import SaveFileButton from "../buttons/SaveFileButton";
 
 export function OBSSettings() {
   const { feignPlayers, serverID, channelID, viewSettings } = React.useContext(ConfContext);

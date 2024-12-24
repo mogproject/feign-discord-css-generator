@@ -2,14 +2,17 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { faDiscord } from "@fortawesome/free-brands-svg-icons";
-import { Container, Row, Col, InputGroup, Form, Button } from "react-bootstrap";
-import { DiscordUser, ConfContext } from "./Context";
+import { Container, Row, Col, InputGroup, Form, Button, Modal } from "react-bootstrap";
+import { DiscordUser, ConfContext } from "../models/Context";
 
 export function DiscordUsers() {
   const { discordUsers, updateDiscordUsers } = React.useContext(ConfContext);
   const [editIndex, setEditIndex] = React.useState(discordUsers.length);
   const [editingUser, setEditingUser] = React.useState(editIndex === discordUsers.length ? { name: "", id: "" } : discordUsers[editIndex]);
   const [validated, setValidated] = React.useState(false);
+  const [modalOpen, SetModalOpen] = React.useState(false);
+  const [removeIndex, SetRemoveIndex] = React.useState(-1);
+  const handleModalClose = () => SetModalOpen(false);
 
   //----------------------------------------------------------------------------
   //  Button Actions
@@ -70,11 +73,22 @@ export function DiscordUsers() {
     setEditIndex(discordUsers.length);
   }
   function removeItem(index: number) {
-    // TODO: open modal
+    if (index < 0 || index >= discordUsers.length) return;
     updateDiscordUsers([...discordUsers.slice(0, index), ...discordUsers.slice(index + 1)]);
     setValidated(false);
     setEditingUser({ name: "", id: "" });
     setEditIndex(discordUsers.length - 1);
+  }
+
+  const modalBody = () => {
+    if (removeIndex < 0 || discordUsers.length <= removeIndex) return <></>;
+    return (<><p>以下のユーザーを削除します。よろしいですか?</p>
+      <ul>
+        <li>名前: {discordUsers[removeIndex].name}</li>
+        <li>ID: {discordUsers[removeIndex].id}</li>
+      </ul>
+    </>
+    );
   }
 
   function DiscordUserRow(user: DiscordUser, index: number) {
@@ -164,7 +178,12 @@ export function DiscordUsers() {
             </Button>
           </Col>
           <Col className="col">
-            <Button size="sm" className={`btn btn-danger ${isEditing ? "invisible" : "visible"}`} onClick={() => removeItem(index)}>
+            <Button size="sm" className={`btn btn-danger ${isEditing ? "invisible" : "visible"}`} onClick={
+              () => {
+                SetModalOpen(true);
+                SetRemoveIndex(index);
+              }
+            }>
               削除
             </Button>
           </Col>
@@ -201,6 +220,26 @@ export function DiscordUsers() {
         return DiscordUserRow(user, index);
       })}
       {discordUsers.length === editIndex ? DiscordUserRow({ name: "", id: "" }, discordUsers.length) : <></>}
+
+      <Modal show={modalOpen} onHide={handleModalClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Discord ユーザーの削除</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {modalBody()}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleModalClose}>
+            キャンセル
+          </Button>
+          <Button variant="danger" onClick={() => {
+            removeItem(removeIndex);
+            handleModalClose();
+          }}>
+            削除
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 }

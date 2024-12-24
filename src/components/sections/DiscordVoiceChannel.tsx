@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, InputGroup, Form } from "react-bootstrap";
-import { ConfContext } from "./Context";
+import { ConfContext } from "../models/Context";
 
 export function DiscordVoiceChannel() {
   const { channelURL, updateVoiceChannelURL } = React.useContext(ConfContext);
