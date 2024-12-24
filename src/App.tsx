@@ -12,10 +12,29 @@ import { buildFeignImageCSS } from "./models/FeignImageCSS";
 import { OBSSettings } from "./components/sections/OBSSettings";
 import { DiscordVoiceChannel } from "./components/sections/DiscordVoiceChannel";
 import { ViewSettingsPane } from "./components/sections/ViewSettingsPane";
+import FileSaveButton from "./components/buttons/FileSaveButton";
+import FileLoadButton from './components/buttons/FileLoadButton';
 
 function retrieveIDs(voiceChannelURL: string): [string, string] {
   const result = voiceChannelURL.match(/^http[s]?:[/][/]discord.com[/]channels[/](\d+)[/](\d+)[/]?$/);
   return result ? [result[1], result[2]] : ["", ""];
+}
+
+interface AllSettings {
+  channelURL: string,
+  discordUsers: DiscordUser[],
+  feignPlayers: string[],
+  viewSettings: ViewSettings,
+}
+
+function settings2json(channelURL: string, discordUsers: DiscordUser[], feignPlayers: string[], viewSettings: ViewSettings) {
+  const data: AllSettings = {
+    channelURL: channelURL,
+    discordUsers: discordUsers,
+    feignPlayers: feignPlayers,
+    viewSettings: viewSettings
+  };
+  return JSON.stringify(data);
 }
 
 export default function App() {
@@ -43,6 +62,24 @@ export default function App() {
   function updateFeignPlayers(newFeignPlayers: string[]) {
     setFeignPlayers(newFeignPlayers);
     localStorage.setItem("feign_players", JSON.stringify(newFeignPlayers));
+  }
+
+  function loadSettingsFromFile(content: string): boolean {
+    try {
+      const data = JSON.parse(content);
+      if (!data) return false;
+
+      const settings = data['viewSettings'] || defaultConf.viewSettings;
+      updateVoiceChannelURL(data['channelURL'] || defaultConf.channelURL);
+      updateDiscordUsers(data['discordUsers'] || defaultConf.discordUsers);
+      updateFeignPlayers(data['feignPlayers'] || defaultConf.feignPlayers);
+      updateFeiSettings(settings.fei);
+      updateAvatarSettings(settings.avatar);
+      updateUsernameSettings(settings.username);
+    } catch (e) {
+      return false;
+    }
+    return true;
   }
 
   const initialFeiSettings = { ...defaultConf.viewSettings.fei, ...JSON.parse(localStorage.getItem("view_fei") || "{}") };
@@ -100,6 +137,18 @@ export default function App() {
             <li>簡易的なユーザー管理により、過去の情報を再利用できます。</li>
           </ul>
           <h2>設定</h2>
+          <Container className="mb-2 d-flex">
+            <div className="me-4">
+              {FileSaveButton(
+                () => settings2json(voiceChannelURL, discordUsers, feignPlayers, viewSettings),
+                '全ての設定を保存', 'feign-discord.json', 'outline-secondary', { minWidth: '200px' }
+              )}
+            </div>
+            <div>
+              {FileLoadButton(loadSettingsFromFile, '全ての設定を読み込み', 'outline-secondary', { minWidth: '200px' })}
+            </div>
+          </Container>
+
           <Accordion defaultActiveKey={["0", "1", "2", "3"]} alwaysOpen className="mb-4">
             <Accordion.Item eventKey="0">
               <Accordion.Header>Discord ボイスチャンネル</Accordion.Header>

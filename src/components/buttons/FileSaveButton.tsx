@@ -1,15 +1,16 @@
 import React from "react";
 import { Button } from "react-bootstrap";
-import { faSave } from "@fortawesome/free-solid-svg-icons";
+import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-function SaveFileButton(content: string, label: string, suggestedName: string, variant: string = "") {
+function FileSaveButton(content: () => string, label: string, suggestedName: string, variant: string = "", style: React.CSSProperties = {}) {
   async function handleSave() {
     const ext = suggestedName.split(".").pop()?.toLowerCase();
+    const data = content();
 
     if (!window.showSaveFilePicker) {
       // In case the browser does not support the File System Access API.
-      const file = new Blob([content], { type: "text/plain;charset=utf-8" });
+      const file = new Blob([data], { type: "text/plain;charset=utf-8" });
       const url = URL.createObjectURL(file);
 
       const element = document.createElement("a");
@@ -38,7 +39,7 @@ function SaveFileButton(content: string, label: string, suggestedName: string, v
         const writableStream = await fileHandle.createWritable();
 
         // Write content to the file
-        await writableStream.write(content);
+        await writableStream.write(data);
 
         // Close the stream to save the file
         await writableStream.close();
@@ -49,11 +50,11 @@ function SaveFileButton(content: string, label: string, suggestedName: string, v
   }
 
   return (
-    <Button onClick={handleSave} variant={variant}>
-      <FontAwesomeIcon icon={faSave} />
+    <Button onClick={handleSave} variant={variant} style={style}>
+      <FontAwesomeIcon icon={faDownload} />
       <span>&nbsp;{label}</span>
     </Button>
   );
 }
 
-export default SaveFileButton;
+export default FileSaveButton;
