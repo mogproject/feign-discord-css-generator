@@ -35,7 +35,8 @@ export function Preview() {
 
   return (
     <Container className="mb-4">
-      <div className="discord_preview" style={{ overflowX: "scroll", backgroundColor: "#cccccc" }}>
+      <p>アイコンをクリックすると会話状態が切り替わります。</p>
+      <div className="discord_preview user-select-none" style={{ overflowX: "scroll", backgroundColor: "#cccccc" }}>
         <div className="Voice_voiceContainer__aaaaa voice_container">
           <ul className="Voice_voiceStates__aaaaa voice_states">
             {Array(activeUsers.length)

@@ -21,7 +21,7 @@ export function FeignPlayers() {
       <Col className="mb-3">
         <Row className="justify-content-md-center mb-2">{COLOR_DESCRIPTION[color]}</Row>
         <Row className="justify-content-md-center mb-2">
-          <img src={`assets/img/${FEI_COLORS[color]}-small.png`} width="80px" style={{ maxWidth: "80px" }}></img>
+          <img src={`assets/img/${FEI_COLORS[color]}-small.png`} width="80px" style={{ maxWidth: "80px" }} alt=""></img>
         </Row>
         <Row className="justify-content-md-center" style={{ marginTop: "-45px" }}>
           <Form.Select onChange={(e) => handleUpdate(color, e.target.value)} size="sm" style={{ width: "90%" }}>
