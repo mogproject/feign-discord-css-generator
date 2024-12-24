@@ -1,5 +1,5 @@
 import React from "react";
-import { Container } from "react-bootstrap";
+import { Alert, Container } from "react-bootstrap";
 import { ConfContext, DiscordUser } from "../models/Context";
 
 export function Preview() {
@@ -7,6 +7,14 @@ export function Preview() {
   const activeIDs = feignPlayers.filter((id: string) => id !== "");
   const activeUsers = discordUsers.filter((user: DiscordUser) => activeIDs.includes(user.id));
   const [isSpeaking, setIsSpeaking] = React.useState(Array(activeUsers.length).fill(false));
+
+  if (feignPlayers.every((user) => user === '')) {
+    return (
+      <Container className="mb-4">
+        <Alert className="alert-warning">Feign プレイヤーを追加してください。</Alert>
+      </Container>
+    )
+  }
 
   function PreviewUser(index: number) {
     return (

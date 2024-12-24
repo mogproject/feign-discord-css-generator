@@ -9,6 +9,14 @@ import SaveFileButton from "../buttons/SaveFileButton";
 export function OBSSettings() {
   const { feignPlayers, serverID, channelID, viewSettings } = React.useContext(ConfContext);
 
+  if (feignPlayers.every((user) => user === '')) {
+    return (
+      <Container className="mb-4">
+        <Alert className="alert-warning">Feign プレイヤーを追加してください。</Alert>
+      </Container>
+    )
+  }
+
   const content = buildCSS(feignPlayers, viewSettings) + "\n" + buildFeignImageCSS();
 
   const obsURL = `https://streamkit.discord.com/overlay/voice/${serverID}/${channelID}`;
