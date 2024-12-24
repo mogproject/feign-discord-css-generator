@@ -3,9 +3,8 @@ import { Container, Row, Col, InputGroup, Form, Alert } from "react-bootstrap";
 import { ConfContext } from "../../models/Context";
 import { buildCSS } from "../../models/CSSBuilder";
 import { buildFeignImageCSS } from "../../models/FeignImageCSS";
-import { ViewSettings } from "../../models/ViewSettings";
 import { CopyButton } from "../buttons/CopyButton";
-import SaveFileButton from "../buttons/SaveFileButton";
+import FileSaveButton from "../buttons/FileSaveButton";
 
 export function OBSSettings() {
   const { feignPlayers, serverID, channelID, viewSettings } = React.useContext(ConfContext);
@@ -23,8 +22,6 @@ export function OBSSettings() {
   const obsURL = `https://streamkit.discord.com/overlay/voice/${serverID}/${channelID}`;
   const obsWidth = 1772 + viewSettings.fei.interval * 12;  // should support up to 13 users
   const obsHeight = viewSettings.getHeight();
-  
-  // 260 + Math.max(0, viewSettings.avatar.offsetY) + Math.max(0, viewSettings.username.offsetY);
 
   return (
     <Container className="mb-4">
@@ -43,7 +40,7 @@ export function OBSSettings() {
                 value={channelID === "" ? "ボイスチャンネル URL が正しく設定されていません" : obsURL}
                 readOnly={true}
               />
-              {CopyButton(obsURL, "", channelID === "")}
+              {CopyButton(() => obsURL, "", channelID === "")}
             </InputGroup>
           </Row>
 
@@ -52,7 +49,7 @@ export function OBSSettings() {
               <InputGroup size="sm">
                 <InputGroup.Text id="obs-width">幅</InputGroup.Text>
                 <Form.Control area-label="obs-width-label" aria-describedby="obs-width" value={obsWidth} readOnly={true} />
-                {CopyButton(obsWidth.toString())}
+                {CopyButton(obsWidth.toString)}
               </InputGroup>
             </Col>
 
@@ -60,7 +57,7 @@ export function OBSSettings() {
               <InputGroup size="sm">
                 <InputGroup.Text id="obs-height">高さ</InputGroup.Text>
                 <Form.Control area-label="obs-height-label" aria-describedby="obs-height" value={obsHeight} readOnly={true} />
-                {CopyButton(obsHeight.toString())}
+                {CopyButton(obsHeight.toString)}
               </InputGroup>
             </Col>
           </Row>
@@ -73,8 +70,8 @@ export function OBSSettings() {
           <Row className="mb-4">
             <InputGroup>
               <InputGroup.Text id="obs-css">カスタム CSS</InputGroup.Text>
-              {CopyButton(content, "クリップボードにコピー")}
-              {SaveFileButton(content, "ファイルとして保存", "feign.css", "outline-secondary")}
+              {CopyButton(() => content, "クリップボードにコピー")}
+              {FileSaveButton(() => content, "ファイルとして保存", "feign.css", "outline-secondary")}
             </InputGroup>
           </Row>
         </Col>

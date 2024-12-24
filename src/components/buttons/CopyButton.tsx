@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { OverlayInjectedProps } from "react-bootstrap/esm/Overlay";
 import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
 
-export function CopyButton(content: string, label: string = "", disabled: boolean = false) {
+export function CopyButton(content: () => string, label: string = "", disabled: boolean = false) {
   const [icon, setIcon] = React.useState(faCopy);
   const [message, setMessage] = React.useState("コピー");
 
@@ -15,7 +15,7 @@ export function CopyButton(content: string, label: string = "", disabled: boolea
 
   function handleCopy() {
     navigator.clipboard
-      .writeText(content)
+      .writeText(content())
       .then(
         () => {
           setIcon(faCheck);
