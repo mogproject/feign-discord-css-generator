@@ -44,7 +44,7 @@ export function buildCSS(feignPlayers: string[], settings: ViewSettings): string
       ? []
       : [
         // Character
-        `.voice_state[data-userid="${id}"]::before  {`,
+        `.voice_state[data-userid="${id}"]::before {`,
         `  background-image: var(--feign-icon-${FEI_COLORS[i]});`,
         `  background-size: ${settings.getFeiWidth()}px ${settings.getFeiHeight()}px;`,
         "  display: inline-block;",
@@ -59,10 +59,11 @@ export function buildCSS(feignPlayers: string[], settings: ViewSettings): string
         "  top: 0px;",
         settings.fei.mirror ? "  -webkit-transform: scaleX(-1);" : "",
         settings.fei.mirror ? "  transform: scaleX(-1);" : "",
+        settings.avatar.front ? '' : '  z-index: 1;',
         "}",
 
         // Animation
-        `.wrapper_speaking[data-userid="${id}"]::before  {`,
+        `.wrapper_speaking[data-userid="${id}"]::before {`,
         `  animation: ${animationString(settings.fei.speaking, "")};`,
         "  animation-fill-mode: forwards;",
         "  filter: brightness(100%);",
@@ -147,6 +148,7 @@ export function buildCSS(feignPlayers: string[], settings: ViewSettings): string
     "  display: block;",
     "  text-align: center;",
     "  position: relative;",
+    settings.avatar.front ? '' : '  z-index: 2;',
     "}",
   ];
   return (

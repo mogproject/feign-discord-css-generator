@@ -92,6 +92,18 @@ export function ViewSettingsPane() {
                     />
                   </Form.Check>
                 </Col>
+
+                <Col className="offset-md-1 col-md-2 text-end">前面に表示</Col>
+                <Col className="col-md-2">
+                  <Form.Check className="form-switch">
+                    <Form.Check.Input
+                      type='checkbox'
+                      role='switch'
+                      checked={viewSettings.avatar.front}
+                      onChange={() => updateAvatarSettings({ ...viewSettings.avatar, front: !viewSettings.avatar.front })}
+                    />
+                  </Form.Check>
+                </Col>
               </Row>
 
               <Row className="mb-2">

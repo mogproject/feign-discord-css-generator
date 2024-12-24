@@ -21,6 +21,7 @@ export interface FeiSettings {
 
 export interface AvatarSettings {
   show: boolean;
+  front: boolean;
   shape: AvatarShape;
   speaking: AnimationSettings;
   offsetY: number;
@@ -67,10 +68,20 @@ export class ViewSettings {
   // Positions relative to Fei's top.
   getFeiTopRelative(): number { return 0; }
   getFeiBottomRelative(): number { return this.getFeiHeight(); }
-  getAvatarTopRelative(): number { return this.getFeiBottomRelative() - ViewSettings.DEFAULT_AVATAR_OVERLAP + this.avatar.offsetY; }
-  getAvatarBottomRelative(): number { return this.getAvatarTopRelative() + this.getAvatarHeight(); }
-  getUsernameTopRelative(): number { return this.getAvatarBottomRelative() - ViewSettings.DEFAULT_USERNAME_OVERLAP + this.username.offsetY; }
-  getUsernameBottomRelative(): number { return this.getUsernameTopRelative() + this.getUsernameHeight(); }
+  getAvatarTopRelative(): number {
+    return this.getFeiBottomRelative() +
+      (this.avatar.show ? (this.avatar.offsetY - ViewSettings.DEFAULT_AVATAR_OVERLAP) : 0);
+  }
+  getAvatarBottomRelative(): number {
+    return this.getAvatarTopRelative() + (this.avatar.show ? this.getAvatarHeight() : 0);
+  }
+  getUsernameTopRelative(): number {
+    return this.getAvatarBottomRelative() +
+      (this.username.show ? (this.username.offsetY - ViewSettings.DEFAULT_USERNAME_OVERLAP) : 0);
+  }
+  getUsernameBottomRelative(): number {
+    return this.getUsernameTopRelative() + (this.username.show ? this.getUsernameHeight() : 0);
+  }
 
   // Top-most and bottom-most elements.
   getTopElementRelative(): number { return Math.min(this.getFeiTopRelative(), this.getAvatarTopRelative(), this.getUsernameTopRelative()); }

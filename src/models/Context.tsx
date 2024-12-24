@@ -69,6 +69,7 @@ const defaultFeiSettings: FeiSettings = {
 
 const defaultAvatarSettings: AvatarSettings = {
   show: true,
+  front: true,
   shape: AvatarShape.Circle,
   speaking: {
     jump: false,
