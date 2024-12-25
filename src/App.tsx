@@ -200,6 +200,15 @@ export default function App() {
       </ConfContext.Provider>
       <style>{buildCSS(feignPlayers, viewSettings)}</style>
       <style>{buildFeignImageCSS()}</style>
+      <hr />
+      <small>
+        <p className="text-muted text-end me-4">
+          <small>
+            Feign-Discord CSS Generator &copy; 2024 &nbsp;
+            <a href="https://mogproject.com" style={{ textDecoration: 'none' }}>mogproject</a>
+          </small>
+        </p>
+      </small>
     </>
   );
 }
