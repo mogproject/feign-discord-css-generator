@@ -1,9 +1,8 @@
 import React from "react";
-import { useState } from "react";
 import Header from "./components/Header";
 import { Container, Accordion } from "react-bootstrap";
 import { FeiSettings, AvatarSettings, UsernameSettings, ViewSettings } from './models/ViewSettings';
-import { DiscordUser, ConfContext, defaultConf } from "./models/Context";
+import { DiscordUser, ConfContext, defaultConf, retrieveChannelIDs } from "./models/Context";
 import { DiscordUsers } from "./components/sections/DiscordUsers";
 import { FeignPlayers } from "./components/sections/FeignPlayers";
 import { Preview } from "./components/sections/Preview";
@@ -14,11 +13,6 @@ import { DiscordVoiceChannel } from "./components/sections/DiscordVoiceChannel";
 import { ViewSettingsPane } from "./components/sections/ViewSettingsPane";
 import FileSaveButton from "./components/buttons/FileSaveButton";
 import FileLoadButton from './components/buttons/FileLoadButton';
-
-function retrieveIDs(voiceChannelURL: string): [string, string] {
-  const result = voiceChannelURL.match(/^http[s]?:[/][/]discord.com[/]channels[/](\d+)[/](\d+)[/]?$/);
-  return result ? [result[1], result[2]] : ["", ""];
-}
 
 interface AllSettings {
   channelURL: string,
@@ -40,8 +34,8 @@ function settings2json(channelURL: string, discordUsers: DiscordUser[], feignPla
 export default function App() {
   // Voice channel.
   const initialVoiceChannelURL: string = localStorage.getItem("voice_channel_url") || "";
-  const [voiceChannelURL, setVoiceChannelURL] = useState(initialVoiceChannelURL);
-  const [serverID, channelID] = retrieveIDs(voiceChannelURL);
+  const [voiceChannelURL, setVoiceChannelURL] = React.useState(initialVoiceChannelURL);
+  const [serverID, channelID] = retrieveChannelIDs(voiceChannelURL);
 
   function updateVoiceChannelURL(newURL: string) {
     localStorage.setItem("voice_channel_url", newURL);

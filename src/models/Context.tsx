@@ -112,3 +112,14 @@ export const defaultConf = {
 
 // Create a global context.
 export const ConfContext = React.createContext<Configuration>(defaultConf);
+
+const CHANNEL_URL_PATTERN = /^https:[/][/]discord.com[/]channels[/](\d+)[/](\d+)[/]?$/;
+
+export function isValidVoiceChannelURL(voiceChannelURL: string): boolean {
+  return !!voiceChannelURL.match(CHANNEL_URL_PATTERN);
+}
+
+export function retrieveChannelIDs(voiceChannelURL: string): [string, string] {
+  const result = voiceChannelURL.match(CHANNEL_URL_PATTERN);
+  return result ? [result[1], result[2]] : ["", ""];
+}
