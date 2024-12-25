@@ -10,16 +10,19 @@ function Footer() {
   const [modalContent, setModalContent] = React.useState({ title: '', body: <></> })
   const handleModalClose = () => setModalOpen(false);
 
+  const createLink = (title: string, link: string) =>
+    <a href={link} target="_blank" rel="noreferrer">{title}</a>;
+
   const createItem = (author: string, title: string, link: string) =>
-    <li>{author}<ul><li><a href={link} target="_blank" rel="noreferrer">{title}</a></li></ul> </li>;
+    <li>{author}<ul><li>{createLink(title, link)}</li></ul> </li>;
 
   const supportedBrowsersContent = (<>
     <p>This website was tested on the following browsers.</p>
     <ul>
-      <li>Chrome (Recommended)
+      <li>{createLink('Google Chrome', 'https://google.com/chrome')} (Recommended)
         <ul><li>Version 131.0.6778.205 (Official Build) (arm64)</li></ul>
       </li>
-      <li>Firefox</li>
+      <li>{createLink('Mozilla Firefox', 'https://mozilla.org/firefox')}</li>
     </ul>
     <p>Mobile screens are not supported.</p>
   </>);
