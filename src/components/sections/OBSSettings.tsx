@@ -49,7 +49,7 @@ export function OBSSettings() {
               <InputGroup size="sm">
                 <InputGroup.Text id="obs-width">幅</InputGroup.Text>
                 <Form.Control area-label="obs-width-label" aria-describedby="obs-width" value={obsWidth} readOnly={true} />
-                {CopyButton(obsWidth.toString)}
+                {CopyButton(() => obsWidth.toString())}
               </InputGroup>
             </Col>
 
@@ -57,7 +57,7 @@ export function OBSSettings() {
               <InputGroup size="sm">
                 <InputGroup.Text id="obs-height">高さ</InputGroup.Text>
                 <Form.Control area-label="obs-height-label" aria-describedby="obs-height" value={obsHeight} readOnly={true} />
-                {CopyButton(obsHeight.toString)}
+                {CopyButton(() => obsHeight.toString())}
               </InputGroup>
             </Col>
           </Row>
