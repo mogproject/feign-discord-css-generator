@@ -71,7 +71,8 @@ export function buildCSS(feignPlayers: string[], settings: ViewSettings): string
       ]
   );
 
-  const animJumpFei = settings.fei.speaking.jump ? ["@keyframes speak-jump { 0% {top: 0px;} 50% {top: -20px;} 100% {top: 0px;} }"] : [];
+  const animJumpFei = (settings.fei.speaking.jump || settings.avatar.speaking.jump)
+    ? ["@keyframes speak-jump { 0% {top: 0px;} 50% {top: -20px;} 100% {top: 0px;} }"] : [];
 
   const animFlashFei = settings.fei.speaking.flash
     ? [
