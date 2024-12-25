@@ -41,7 +41,7 @@ export class ViewSettings {
   username: UsernameSettings;
 
   static readonly DEFAULT_TOP_MARGIN = 40;
-  static readonly DEFAULT_BOTTOM_MARGIN = 18;
+  static readonly DEFAULT_BOTTOM_MARGIN = 28;
   static readonly FEI_WIDTH = 134;
   static readonly FEI_HEIGHT = 200;
   static readonly AVATAR_WIDTH = 120;

@@ -15,9 +15,13 @@
   margin: 0;
 }
 
+/* Modify fonts as we cannot use gg sans. */
 [class*="voiceContainer"] {
-  font-family: gg sans;
-  font-weight: 600;
+  /* font-family: gg sans; */
+  /* font-weight: 600; */
+  font-family: 'gg sans', 'Hiragino Sans', 'ヒラギノ角ゴ ProN W3', 'Hiragino Kaku Gothic ProN', メイリオ, Meiryo,
+  Osaka, 'MS PGothic', 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 800;
   font-size: 16px;
   line-height: 19px;
   color: white;
