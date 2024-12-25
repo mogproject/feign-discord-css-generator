@@ -8,14 +8,7 @@ import FileSaveButton from "../buttons/FileSaveButton";
 
 export function OBSSettings() {
   const { feignPlayers, serverID, channelID, viewSettings } = React.useContext(ConfContext);
-
-  if (feignPlayers.every((user) => user === '')) {
-    return (
-      <Container className="mb-4">
-        <Alert className="alert-warning">Feign プレイヤーを追加してください。</Alert>
-      </Container>
-    )
-  }
+  const isValid = feignPlayers.some((user) => user !== '');
 
   const content = buildCSS(feignPlayers, viewSettings) + "\n" + buildFeignImageCSS();
 
@@ -23,8 +16,11 @@ export function OBSSettings() {
   const obsWidth = 1772 + viewSettings.fei.interval * 12;  // should support up to 13 users
   const obsHeight = viewSettings.getHeight();
 
-  return (
-    <Container className="mb-4">
+  return (<>
+    <Container className={`mb-4${isValid ? ' d-none' : ''}`}>
+      <Alert className="alert-warning">Feign プレイヤーを追加してください。</Alert>
+    </Container>
+    <Container className={`mb-4${isValid ? '' : ' d-none'}`}>
       <p className="mb-3">「ソース」 → 「ブラウザ」 のプロパティ画面にて、以下の内容を設定してください。</p>
       <Row>
         <Col className="col-md-5">
@@ -77,5 +73,6 @@ export function OBSSettings() {
         </Col>
       </Row>
     </Container>
+  </>
   );
 }
