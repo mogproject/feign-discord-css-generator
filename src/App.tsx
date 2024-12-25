@@ -13,6 +13,7 @@ import { DiscordVoiceChannel } from "./components/sections/DiscordVoiceChannel";
 import { ViewSettingsPane } from "./components/sections/ViewSettingsPane";
 import FileSaveButton from "./components/buttons/FileSaveButton";
 import FileLoadButton from './components/buttons/FileLoadButton';
+import Footer from "./components/Footer";
 
 interface AllSettings {
   channelURL: string,
@@ -140,7 +141,7 @@ export default function App() {
           updateUsernameSettings: updateUsernameSettings,
         }}
       >
-        <Container style={{ paddingTop: "5px" }}>
+        <Container style={{ marginTop: "30px", paddingTop: "5px" }}>
           <p>
             <small>全ての設定は、お使いのブラウザにのみ保存されます。設定内容が外部に送信されることはありません。</small>
           </p>
@@ -201,14 +202,7 @@ export default function App() {
       <style>{buildCSS(feignPlayers, viewSettings)}</style>
       <style>{buildFeignImageCSS()}</style>
       <hr />
-      <small>
-        <p className="text-muted text-end me-4">
-          <small>
-            Feign-Discord CSS Generator &copy; 2024 &nbsp;
-            <a href="https://mogproject.com" style={{ textDecoration: 'none' }}>mogproject</a>
-          </small>
-        </p>
-      </small>
+      <Footer />
     </>
   );
 }

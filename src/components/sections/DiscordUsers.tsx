@@ -7,9 +7,9 @@ import { DiscordUser, ConfContext } from "../../models/Context";
 
 export function DiscordUsers() {
   const { discordUsers, discordUserEditing, updateDiscordUsers, cleanDiscordId, updateDiscordUserEditing } = React.useContext(ConfContext);
-  const [modalOpen, SetModalOpen] = React.useState(false);
-  const [removeIndex, SetRemoveIndex] = React.useState(-1);
-  const handleModalClose = () => SetModalOpen(false);
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const [removeIndex, setRemoveIndex] = React.useState(-1);
+  const handleModalClose = () => setModalOpen(false);
 
   //----------------------------------------------------------------------------
   //  Button Actions
@@ -188,8 +188,8 @@ export function DiscordUsers() {
               style={{ minWidth: '70px' }}
               onClick={
                 () => {
-                  SetModalOpen(true);
-                  SetRemoveIndex(index);
+                  setModalOpen(true);
+                  setRemoveIndex(index);
                 }
               }>
               削除

@@ -16,3 +16,9 @@ code {
   --bs-accordion-active-color: var(--bs-secodary-text-emphasis) !important;
   --bs-accordion-active-bg: var(--bs-secondary-bg-subtle) !important;
 }
+
+.link-like {
+  color: rgb(13,110,253);
+  text-decoration: none;
+  cursor: pointer;
+}
