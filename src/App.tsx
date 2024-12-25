@@ -13,6 +13,7 @@ import { DiscordVoiceChannel } from "./components/sections/DiscordVoiceChannel";
 import { ViewSettingsPane } from "./components/sections/ViewSettingsPane";
 import FileSaveButton from "./components/buttons/FileSaveButton";
 import FileLoadButton from './components/buttons/FileLoadButton';
+import Footer from "./components/Footer";
 
 interface AllSettings {
   channelURL: string,
@@ -140,17 +141,17 @@ export default function App() {
           updateUsernameSettings: updateUsernameSettings,
         }}
       >
-        <Container style={{ paddingTop: "5px" }}>
+        <Container style={{ marginTop: "60px", paddingTop: "5px" }}>
           <p>
             <small>全ての設定は、お使いのブラウザにのみ保存されます。設定内容が外部に送信されることはありません。</small>
           </p>
-          <h2>特徴</h2>
+          <h2 id='features'>特徴</h2>
           <ul>
             <li>単一の CSS で Discord アイコンと Feign のキャラクターを同時に表示します。</li>
             <li>CSS 内部に画像情報を保存しているため、外部依存を減らすことができます。</li>
             <li>簡易的なユーザー管理により、過去の情報を再利用できます。</li>
           </ul>
-          <h2>設定</h2>
+          <h2 id='settings'>設定</h2>
           <Container className="mb-2 d-flex">
             <div className="me-4">
               {FileSaveButton(
@@ -192,23 +193,16 @@ export default function App() {
               </Accordion.Body>
             </Accordion.Item>
           </Accordion>
-          <h2>プレビュー</h2>
+          <h2 id='preview'>プレビュー</h2>
           <Preview />
-          <h2>OBS 設定</h2>
+          <h2 id='obs'>OBS 設定</h2>
           <OBSSettings />
         </Container>
       </ConfContext.Provider>
       <style>{buildCSS(feignPlayers, viewSettings)}</style>
       <style>{buildFeignImageCSS()}</style>
       <hr />
-      <small>
-        <p className="text-muted text-end me-4">
-          <small>
-            Feign-Discord CSS Generator &copy; 2024 &nbsp;
-            <a href="https://mogproject.com" style={{ textDecoration: 'none' }}>mogproject</a>
-          </small>
-        </p>
-      </small>
+      <Footer />
     </>
   );
 }

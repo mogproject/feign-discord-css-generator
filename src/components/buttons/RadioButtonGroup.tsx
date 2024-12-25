@@ -15,10 +15,9 @@ export function RadioButtonGroup(labels: string[], value: number, handleChange: 
       <ButtonGroup>
         {labels.map((label: string, i: number) => {
           return (
-            <>
+            <React.Fragment key={`${key}-${i}`}>
               <Form.Control
                 name={`${key}`}
-                key={`${key}-${i}`}
                 id={`${key}-${i}`}
                 type="radio"
                 autoComplete="off"
@@ -29,7 +28,7 @@ export function RadioButtonGroup(labels: string[], value: number, handleChange: 
               <label className="btn btn-outline-primary" htmlFor={`${key}-${i}`}>
                 {label}
               </label>
-            </>
+            </React.Fragment>
           );
         })}
       </ButtonGroup>
