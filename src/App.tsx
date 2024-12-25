@@ -32,6 +32,11 @@ function settings2json(channelURL: string, discordUsers: DiscordUser[], feignPla
   return JSON.stringify(data);
 }
 
+function players2array(feignPlayers: string[]) {
+  const numActivePlayers = feignPlayers.filter((id: string) => id !== '').length;
+  return Array(numActivePlayers).fill(false);
+}
+
 export default function App() {
   // Voice channel.
   const initialVoiceChannelURL: string = localStorage.getItem("voice_channel_url") || "";
@@ -99,6 +104,9 @@ export default function App() {
     localStorage.setItem("view_username", JSON.stringify(newSettings));
   }
 
+  // Preview
+  const [isSpeaking, setIsSpeaking] = React.useState(players2array(feignPlayers));
+
   function loadSettingsFromFile(content: string): boolean {
     try {
       const data = JSON.parse(content);
@@ -107,16 +115,18 @@ export default function App() {
       const settings = data['viewSettings'] || defaultConf.viewSettings;
       updateVoiceChannelURL(data['channelURL'] || defaultConf.channelURL);
       updateDiscordUsers(data['discordUsers'] || defaultConf.discordUsers);
-      updateFeignPlayers(data['feignPlayers'] || defaultConf.feignPlayers);
+      const newFeignPlayers = data['feignPlayers'] || defaultConf.feignPlayers;
+      updateFeignPlayers(newFeignPlayers);
       updateFeiSettings(settings.fei);
       updateAvatarSettings(settings.avatar);
       updateUsernameSettings(settings.username);
+
+      setIsSpeaking(players2array(newFeignPlayers));  // no one is speaking
     } catch (e) {
       return false;
     }
     return true;
   }
-
   const viewSettings = new ViewSettings(feiSettings, avatarSettings, usernameSettings);
 
   return (
@@ -139,6 +149,8 @@ export default function App() {
           updateFeiSettings: updateFeiSettings,
           updateAvatarSettings: updateAvatarSettings,
           updateUsernameSettings: updateUsernameSettings,
+          isSpeaking: isSpeaking,
+          updateIsSpeaking: setIsSpeaking,
         }}
       >
         <Container style={{ marginTop: "60px", paddingTop: "5px" }}>

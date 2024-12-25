@@ -56,6 +56,8 @@ interface Configuration {
   updateFeiSettings: (settings: FeiSettings) => void;
   updateAvatarSettings: (settings: AvatarSettings) => void;
   updateUsernameSettings: (settings: UsernameSettings) => void;
+  isSpeaking: boolean[];
+  updateIsSpeaking: (data: boolean[]) => void;
 }
 
 const defaultFeiSettings: FeiSettings = {
@@ -108,6 +110,8 @@ export const defaultConf = {
   updateFeiSettings: () => { },
   updateAvatarSettings: () => { },
   updateUsernameSettings: () => { },
+  isSpeaking: [],
+  updateIsSpeaking: () => {},
 };
 
 // Create a global context.

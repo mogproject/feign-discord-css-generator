@@ -3,18 +3,11 @@ import { Alert, Container } from "react-bootstrap";
 import { ConfContext, DiscordUser } from "../../models/Context";
 
 export function Preview() {
-  const { discordUsers, feignPlayers, viewSettings } = React.useContext(ConfContext);
-  const activeIDs = feignPlayers.filter((id: string) => id !== "");
-  const activeUsers = discordUsers.filter((user: DiscordUser) => activeIDs.includes(user.id));
-  const [isSpeaking, setIsSpeaking] = React.useState(Array(activeUsers.length).fill(false));
+  const { discordUsers, feignPlayers, viewSettings, isSpeaking, updateIsSpeaking } = React.useContext(ConfContext);
 
-  if (feignPlayers.every((user) => user === '')) {
-    return (
-      <Container className="mb-4">
-        <Alert className="alert-warning">Feign プレイヤーを追加してください。</Alert>
-      </Container>
-    )
-  }
+  const activeIDs: string[] = feignPlayers.filter((id: string) => id !== "");
+  const activeUsers: DiscordUser[] = discordUsers.filter((user: DiscordUser) => activeIDs.includes(user.id));
+  const isValid = activeIDs.length > 0;
 
   function PreviewUser(index: number) {
     return (
@@ -22,7 +15,7 @@ export function Preview() {
         key={`preview-${index}`}
         className={`Voice_voiceState__aaaaa ${isSpeaking[index] ? "wrapper_speaking" : "self_mute"} is_widget_owner voice_state`}
         data-userid={activeUsers[index].id}
-        onClick={() => setIsSpeaking([...isSpeaking.slice(0, index), !isSpeaking[index], ...isSpeaking.slice(index + 1)])}
+        onClick={() => updateIsSpeaking([...isSpeaking.slice(0, index), !isSpeaking[index], ...isSpeaking.slice(index + 1)])}
       >
         <img
           className={`Voice_avatar__aaaaa ${isSpeaking[index] ? "Voice_avatarSpeaking__aaaaa" : ""} voice_avatar`}
@@ -44,8 +37,12 @@ export function Preview() {
 
   const paneHeight = viewSettings.getHeight() + 16;  // add height of scroll bar
 
-  return (
-    <Container className="mb-4">
+  return (<>
+    <Container className={`mb-4${isValid ? ' d-none' : ''}`}>
+      <Alert className="alert-warning">Feign プレイヤーを追加してください。</Alert>
+    </Container>
+    <Container className={`mb-4${isValid ? '' : ' d-none'}`}>
+      {/* <Container className={`mb-4`}> */}
       <p>アイコンをクリックすると会話状態が切り替わります。</p>
       <div className="discord_preview user-select-none" style={{ overflowX: "scroll", backgroundColor: "#cccccc", height: paneHeight }}>
         <div className="Voice_voiceContainer__aaaaa voice_container">
@@ -57,5 +54,6 @@ export function Preview() {
         </div>
       </div>
     </Container>
+  </>
   );
 }
