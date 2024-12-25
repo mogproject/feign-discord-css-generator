@@ -46,7 +46,10 @@ interface Configuration {
   channelID: string;
   updateVoiceChannelURL: (url: string) => void;
   discordUsers: DiscordUser[];
+  discordUserEditing: { index: number, name: string, id: string };
   updateDiscordUsers: (users: DiscordUser[]) => void;
+  cleanDiscordId: (id: string) => void;
+  updateDiscordUserEditing: (index: number, name: string, id: string) => void;
   feignPlayers: string[];
   updateFeignPlayers: (players: string[]) => void;
   viewSettings: ViewSettings;
@@ -95,7 +98,10 @@ export const defaultConf = {
   channelID: "",
   updateVoiceChannelURL: () => { },
   discordUsers: [],
+  discordUserEditing: { index: 0, name: '', id: '' },
   updateDiscordUsers: () => { },
+  cleanDiscordId: () => { },
+  updateDiscordUserEditing: () => { },
   feignPlayers: Array(13).fill(""),
   updateFeignPlayers: () => { },
   viewSettings: new ViewSettings(defaultFeiSettings, defaultAvatarSettings, defaultUsernameSettings),
@@ -106,3 +112,14 @@ export const defaultConf = {
 
 // Create a global context.
 export const ConfContext = React.createContext<Configuration>(defaultConf);
+
+const CHANNEL_URL_PATTERN = /^https:[/][/]discord.com[/]channels[/](\d+)[/](\d+)[/]?$/;
+
+export function isValidVoiceChannelURL(voiceChannelURL: string): boolean {
+  return CHANNEL_URL_PATTERN.test(voiceChannelURL);
+}
+
+export function retrieveChannelIDs(voiceChannelURL: string): [string, string] {
+  const result = voiceChannelURL.match(CHANNEL_URL_PATTERN);
+  return result ? [result[1], result[2]] : ["", ""];
+}

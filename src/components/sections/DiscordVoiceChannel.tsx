@@ -1,28 +1,30 @@
 import React from "react";
 import { Container, InputGroup, Form } from "react-bootstrap";
-import { ConfContext } from "../../models/Context";
+import { ConfContext, isValidVoiceChannelURL } from "../../models/Context";
 
 export function DiscordVoiceChannel() {
   const { channelURL, updateVoiceChannelURL } = React.useContext(ConfContext);
-
-
-  function handleVoiceChannelURL(e: React.ChangeEvent<HTMLInputElement>) {
-    const newValue = e.target.value;
-    updateVoiceChannelURL(newValue);
-  }
+  const isEmpty = channelURL === '';
+  const isValid = isValidVoiceChannelURL(channelURL);
+  const feedback = 'https://discord.com/channels/ で始まる URL を入力してください';
 
   return (
     <Container>
       <p>Discord を起動し、対象のボイスチャンネルを右クリック → 「リンクをコピー」を選択。以下のフォームに貼り付けてください。</p>
-      <InputGroup size="sm">
+      <InputGroup size="sm" hasValidation>
         <InputGroup.Text id="voice-channel-url">URL</InputGroup.Text>
         <Form.Control
           area-label="voice-channel-url-label"
           aria-describedby="voice-channel-url"
+          required
+          placeholder="URL を入力"
           value={channelURL}
-          onChange={handleVoiceChannelURL}
+          isValid={isValid}
+          isInvalid={!isEmpty && !isValid}
+          onChange={(e) => updateVoiceChannelURL(e.target.value)}
           style={{ maxWidth: "540px" }}
         />
+        <Form.Control.Feedback type="invalid" tooltip={true}>{feedback}</Form.Control.Feedback>
       </InputGroup>
     </Container>
   );

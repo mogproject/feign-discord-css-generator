@@ -30,6 +30,8 @@ function FileLoadButton(handler: (content: string) => boolean, label: string, va
           setMessage({ class: 'danger', text: `読み込み失敗: ${file.name}` });
         }
       }
+      // This makes an effect when loading the same file path repeatedly.
+      e.target.value = '';
     }
 
     reader.onerror = () => {
@@ -42,7 +44,7 @@ function FileLoadButton(handler: (content: string) => boolean, label: string, va
     <Form>
       <Form.Control type="file" id={controlId} hidden onChange={handleLoad} />
       <Form.Label className={`btn btn-${variant} me-1`} htmlFor={controlId}
-        onClick={() => setMessage({ class: 'warning', text: '' })}
+        onClick={() => setMessage({ class: 'default', text: '' })}
         style={style}
       >
         <FontAwesomeIcon icon={faUpload} />
@@ -50,7 +52,6 @@ function FileLoadButton(handler: (content: string) => boolean, label: string, va
       </Form.Label>
       <Form.Text className={`text-${message.class}`}>
         {message.text}
-        {/* 読み込み完了: aa */}
       </Form.Text>
     </Form>
   );

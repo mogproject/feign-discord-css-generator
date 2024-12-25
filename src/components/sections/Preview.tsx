@@ -19,6 +19,7 @@ export function Preview() {
   function PreviewUser(index: number) {
     return (
       <li
+        key={`preview-${index}`}
         className={`Voice_voiceState__aaaaa ${isSpeaking[index] ? "wrapper_speaking" : "self_mute"} is_widget_owner voice_state`}
         data-userid={activeUsers[index].id}
         onClick={() => setIsSpeaking([...isSpeaking.slice(0, index), !isSpeaking[index], ...isSpeaking.slice(index + 1)])}

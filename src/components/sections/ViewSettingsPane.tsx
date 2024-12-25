@@ -48,7 +48,7 @@ export function ViewSettingsPane() {
               <Row className="mb-2">
                 <Col className="col-md-2">顔の向き</Col>
                 <Col className="col-md-2">
-                  {RadioButtonGroup("fei-mirror", ["左向き", "右向き"], viewSettings.fei.mirror ? 0 : 1, (index: number) => {
+                  {RadioButtonGroup(["左向き", "右向き"], viewSettings.fei.mirror ? 0 : 1, (index: number) => {
                     updateFeiSettings({ ...viewSettings.fei, mirror: index === 0 });
                   })}
                 </Col>
@@ -110,7 +110,7 @@ export function ViewSettingsPane() {
                 <Col className="col-md-2">形状</Col>
 
                 <Col className="col-md-4">
-                  {RadioButtonGroup("avatar-shape", ["丸", "角丸四角", "四角"], viewSettings.avatar.shape.valueOf(), (index) => {
+                  {RadioButtonGroup(["丸", "角丸四角", "四角"], viewSettings.avatar.shape.valueOf(), (index) => {
                     updateAvatarSettings({
                       ...viewSettings.avatar,
                       shape: [AvatarShape.Circle, AvatarShape.RoundedRectangle, AvatarShape.Rectangle][index],

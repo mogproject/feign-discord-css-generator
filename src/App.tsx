@@ -1,9 +1,8 @@
 import React from "react";
-import { useState } from "react";
 import Header from "./components/Header";
 import { Container, Accordion } from "react-bootstrap";
 import { FeiSettings, AvatarSettings, UsernameSettings, ViewSettings } from './models/ViewSettings';
-import { DiscordUser, ConfContext, defaultConf } from "./models/Context";
+import { DiscordUser, ConfContext, defaultConf, retrieveChannelIDs } from "./models/Context";
 import { DiscordUsers } from "./components/sections/DiscordUsers";
 import { FeignPlayers } from "./components/sections/FeignPlayers";
 import { Preview } from "./components/sections/Preview";
@@ -14,11 +13,6 @@ import { DiscordVoiceChannel } from "./components/sections/DiscordVoiceChannel";
 import { ViewSettingsPane } from "./components/sections/ViewSettingsPane";
 import FileSaveButton from "./components/buttons/FileSaveButton";
 import FileLoadButton from './components/buttons/FileLoadButton';
-
-function retrieveIDs(voiceChannelURL: string): [string, string] {
-  const result = voiceChannelURL.match(/^http[s]?:[/][/]discord.com[/]channels[/](\d+)[/](\d+)[/]?$/);
-  return result ? [result[1], result[2]] : ["", ""];
-}
 
 interface AllSettings {
   channelURL: string,
@@ -38,24 +32,34 @@ function settings2json(channelURL: string, discordUsers: DiscordUser[], feignPla
 }
 
 export default function App() {
-  // Load settings.
+  // Voice channel.
   const initialVoiceChannelURL: string = localStorage.getItem("voice_channel_url") || "";
-  const [voiceChannelURL, setVoiceChannelURL] = useState(initialVoiceChannelURL);
-  const [serverID, channelID] = retrieveIDs(voiceChannelURL);
+  const [voiceChannelURL, setVoiceChannelURL] = React.useState(initialVoiceChannelURL);
+  const [serverID, channelID] = retrieveChannelIDs(voiceChannelURL);
 
   function updateVoiceChannelURL(newURL: string) {
     localStorage.setItem("voice_channel_url", newURL);
     setVoiceChannelURL(newURL);
   }
 
+  // Discord users.
   const initialDiscordUsers: DiscordUser[] = JSON.parse(localStorage.getItem("discord_users") || "[]");
   const [discordUsers, setDiscordUsers] = React.useState(initialDiscordUsers);
+  const [discordUserEditing, setDiscordUserEditing] = React.useState(
+    { index: discordUsers.length, name: '', id: '' }
+  );
 
   function updateDiscordUsers(newDiscordUsers: DiscordUser[]) {
     setDiscordUsers(newDiscordUsers);
     localStorage.setItem("discord_users", JSON.stringify(newDiscordUsers));
+    setDiscordUserEditing({ index: newDiscordUsers.length, name: '', id: '' });  // refresh editing user
   }
 
+  function updateDiscordUserEditing(newEditIndex: number, newName: string, newId: string) {
+    setDiscordUserEditing({ index: newEditIndex, name: newName, id: newId });
+  }
+
+  // Feign players.
   const initialFeignPlayers: string[] = JSON.parse(localStorage.getItem("feign_players") || '["' + '","'.repeat(12) + '"]');
   const [feignPlayers, setFeignPlayers] = React.useState(initialFeignPlayers);
 
@@ -64,24 +68,13 @@ export default function App() {
     localStorage.setItem("feign_players", JSON.stringify(newFeignPlayers));
   }
 
-  function loadSettingsFromFile(content: string): boolean {
-    try {
-      const data = JSON.parse(content);
-      if (!data) return false;
-
-      const settings = data['viewSettings'] || defaultConf.viewSettings;
-      updateVoiceChannelURL(data['channelURL'] || defaultConf.channelURL);
-      updateDiscordUsers(data['discordUsers'] || defaultConf.discordUsers);
-      updateFeignPlayers(data['feignPlayers'] || defaultConf.feignPlayers);
-      updateFeiSettings(settings.fei);
-      updateAvatarSettings(settings.avatar);
-      updateUsernameSettings(settings.username);
-    } catch (e) {
-      return false;
+  function cleanDiscordId(id: string) {
+    if (feignPlayers.includes(id)) {
+      updateFeignPlayers(feignPlayers.map((userId) => id === userId ? '' : userId));
     }
-    return true;
   }
 
+  // Settings.
   const initialFeiSettings = { ...defaultConf.viewSettings.fei, ...JSON.parse(localStorage.getItem("view_fei") || "{}") };
   const initialAvatarSettings = { ...defaultConf.viewSettings.avatar, ...JSON.parse(localStorage.getItem("view_avatar") || "{}") };
   const initialUsernameSettings = { ...defaultConf.viewSettings.username, ...JSON.parse(localStorage.getItem("view_username") || "{}") };
@@ -105,6 +98,24 @@ export default function App() {
     localStorage.setItem("view_username", JSON.stringify(newSettings));
   }
 
+  function loadSettingsFromFile(content: string): boolean {
+    try {
+      const data = JSON.parse(content);
+      if (!data) return false;
+
+      const settings = data['viewSettings'] || defaultConf.viewSettings;
+      updateVoiceChannelURL(data['channelURL'] || defaultConf.channelURL);
+      updateDiscordUsers(data['discordUsers'] || defaultConf.discordUsers);
+      updateFeignPlayers(data['feignPlayers'] || defaultConf.feignPlayers);
+      updateFeiSettings(settings.fei);
+      updateAvatarSettings(settings.avatar);
+      updateUsernameSettings(settings.username);
+    } catch (e) {
+      return false;
+    }
+    return true;
+  }
+
   const viewSettings = new ViewSettings(feiSettings, avatarSettings, usernameSettings);
 
   return (
@@ -117,7 +128,10 @@ export default function App() {
           channelID: channelID,
           updateVoiceChannelURL: updateVoiceChannelURL,
           discordUsers: discordUsers,
+          discordUserEditing: discordUserEditing,
           updateDiscordUsers: updateDiscordUsers,
+          cleanDiscordId: cleanDiscordId,
+          updateDiscordUserEditing: updateDiscordUserEditing,
           feignPlayers: feignPlayers,
           updateFeignPlayers: updateFeignPlayers,
           viewSettings: viewSettings,
