@@ -16,13 +16,15 @@ export function DiscordVoiceChannel() {
         <Form.Control
           area-label="voice-channel-url-label"
           aria-describedby="voice-channel-url"
+          required
+          placeholder="URL を入力"
           value={channelURL}
           isValid={isValid}
           isInvalid={!isEmpty && !isValid}
           onChange={(e) => updateVoiceChannelURL(e.target.value)}
           style={{ maxWidth: "540px" }}
         />
-        <div className={'invalid-tooltip'}>{feedback}</div>
+        <Form.Control.Feedback type="invalid" tooltip={true}>{feedback}</Form.Control.Feedback>
       </InputGroup>
     </Container>
   );

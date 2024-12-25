@@ -1,13 +1,12 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
-import { faDiscord } from "@fortawesome/free-brands-svg-icons";
+// import { faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { Container, Row, Col, InputGroup, Form, Button, Modal } from "react-bootstrap";
 import { DiscordUser, ConfContext } from "../../models/Context";
 
 export function DiscordUsers() {
   const { discordUsers, discordUserEditing, updateDiscordUsers, cleanDiscordId, updateDiscordUserEditing } = React.useContext(ConfContext);
-  const [validated, setValidated] = React.useState(false);
   const [modalOpen, SetModalOpen] = React.useState(false);
   const [removeIndex, SetRemoveIndex] = React.useState(-1);
   const handleModalClose = () => SetModalOpen(false);
@@ -48,9 +47,6 @@ export function DiscordUsers() {
         trimmedUser, ...discordUsers.slice(discordUserEditing.index + 1)
       ]);
     }
-
-    // create new row
-    setValidated(false);
   }
   function moveDown(index: number) {
     if (index + 1 >= discordUsers.length) return;
@@ -67,11 +63,9 @@ export function DiscordUsers() {
   }
   function startEdit(index: number) {
     if (index >= discordUsers.length) return;
-    setValidated(true);
     updateDiscordUserEditing(index, discordUsers[index].name, discordUsers[index].id);
   }
   function cancelEdit() {
-    setValidated(false);
     updateDiscordUserEditing(discordUsers.length, '', '');
   }
   function removeItem(index: number) {
@@ -79,7 +73,6 @@ export function DiscordUsers() {
 
     cleanDiscordId(discordUsers[index].id);
     updateDiscordUsers([...discordUsers.slice(0, index), ...discordUsers.slice(index + 1)]);
-    setValidated(false);
   }
 
   const modalBody = () => {
@@ -97,49 +90,63 @@ export function DiscordUsers() {
     const isEditing = discordUserEditing.index < discordUsers.length;
 
     if (index === discordUserEditing.index) {
+      const nameTrimmed = discordUserEditing.name.trim();
+      const isNameEmpty = nameTrimmed === '';
+      const isNameUnique = discordUsers.every((user, i) => i === index || user.name !== nameTrimmed)
+      const isNameValid = !isNameEmpty && isNameUnique;
+      const nameFeedback = `既に存在します: ${nameTrimmed}`;
+      const idTrimmed = discordUserEditing.id.trim();
+      const isIdEmpty = idTrimmed === '';
+      const isIdDigitOnly = /^[0-9]+$/.test(idTrimmed);
+      const isIdUnique = discordUsers.every((user, i) => i === index || user.id !== idTrimmed);
+      const isIdValid = isIdDigitOnly && isIdUnique;
+      const idFeedback = isIdDigitOnly ? `既に存在します: ${idTrimmed}` : 'ID には数字のみ含まれます';
+
       return (
-        <Form key={`discord-${index}`} noValidate validated={validated} onSubmit={handleSubmit}>
-          <Row className="row-cols-lg-auto align-items-center mb-1">
-            <Col>
+        <Form key={`discord-${index}`} onSubmit={handleSubmit}>
+          <Row className="mb-1">
+            {/* <Col className="col-md-1">
               <FontAwesomeIcon icon={faDiscord} />
-            </Col>
-            <Col>
-              <InputGroup size="sm">
-                <InputGroup.Text id={`discord-user-${index}`}>名前</InputGroup.Text>
+            </Col> */}
+            <Col className="col-md-3">
+              <InputGroup size="sm" hasValidation>
+                <InputGroup.Text id={`discord-user-edit-${index}`}>名前</InputGroup.Text>
                 <Form.Control
-                  area-label={`discord-user-${index}`}
-                  area-aria-describedby={`discord-user-${index}`}
-                  required
+                  area-label={`discord-user-edit-label-${index}`}
+                  area-aria-describedby={`discord-user-edit-${index}`}
+                  required={isEditing}
+                  placeholder="名前を入力"
                   value={discordUserEditing.name}
+                  isValid={!isNameEmpty && isNameValid}
+                  isInvalid={!isNameEmpty && !isNameValid}
                   onChange={(e) => updateDiscordUserEditing(index, e.target.value, discordUserEditing.id)}
                 />
-                <Form.Control.Feedback type="invalid" tooltip={true}>
-                  ユーザー名を入力してください。
-                </Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid" tooltip={true}>{nameFeedback}</Form.Control.Feedback>
               </InputGroup>
             </Col>
-            <Col>
-              <InputGroup size="sm">
-                <InputGroup.Text id={`discord-id-${index}`}>ID</InputGroup.Text>
+            <Col className='col-md-3'>
+              <InputGroup size="sm" hasValidation>
+                <InputGroup.Text id={`discord-id-edit-${index}`}>ID</InputGroup.Text>
                 <Form.Control
-                  area-label={`discord-id-label-${index}`}
-                  area-aria-describedby={`discord-id-${index}`}
-                  required
+                  area-label={`discord-id-edit-label-${index}`}
+                  area-aria-describedby={`discord-id-edit-${index}`}
+                  required={isEditing}
+                  placeholder="Discord ID を入力"
                   value={discordUserEditing.id}
+                  isValid={!isIdEmpty && isIdValid}
+                  isInvalid={!isIdEmpty && !isIdValid}
                   onChange={(e) => updateDiscordUserEditing(index, discordUserEditing.name, e.target.value)}
                 />
-                <Form.Control.Feedback type="invalid" tooltip={true}>
-                  Discord ユーザー ID を入力してください。
-                </Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid" tooltip={true}>{idFeedback}</Form.Control.Feedback>
               </InputGroup>
             </Col>
-            <Col className="col">
-              <Button type="submit" size="sm" className="btn btn-primary">
+            <Col className="col-md-3">
+              <Button type="submit" size="sm" variant="primary" className="me-3" disabled={!isNameValid || !isIdValid}
+                style={{ minWidth: '70px' }}>
                 {`${isEditing ? "保存" : "追加"}`}
               </Button>
-            </Col>
-            <Col className="col">
-              <Button size="sm" className={`btn btn-secondary ${isEditing ? "visible" : "invisible"}`} onClick={cancelEdit}>
+              <Button size="sm" variant="secondary" className={`${isEditing ? "visible" : "invisible"}`} onClick={cancelEdit}
+                style={{ minWidth: '70px' }}>
                 キャンセル
               </Button>
             </Col>
@@ -148,11 +155,8 @@ export function DiscordUsers() {
       );
     } else {
       return (
-        <Row key={`discord-${index}`} className="row-cols-lg-auto align-items-center mb-1">
-          <Col>
-            <FontAwesomeIcon icon={faDiscord} />
-          </Col>
-          <Col>
+        <Row key={`discord-${index}`} className="mb-1">
+          <Col className="col-md-3">
             <InputGroup size="sm">
               <InputGroup.Text id={`discord-user-${index}`}>名前</InputGroup.Text>
               <Form.Control
@@ -163,7 +167,7 @@ export function DiscordUsers() {
               />
             </InputGroup>
           </Col>
-          <Col>
+          <Col className="col-md-3">
             <InputGroup size="sm">
               <InputGroup.Text id={`discord-id-${index}`}>ID</InputGroup.Text>
               <Form.Control
@@ -174,34 +178,36 @@ export function DiscordUsers() {
               />
             </InputGroup>
           </Col>
-          <Col>
-            <Button size="sm" className={`btn btn-secondary ${isEditing ? "invisible" : "visible"}`} onClick={() => startEdit(index)}>
+          <Col className="col-md-3">
+            <Button size="sm" variant="secondary" className={`me-3 ${isEditing ? "invisible" : "visible"}`}
+              style={{ minWidth: '70px' }}
+              onClick={() => startEdit(index)}>
               編集
             </Button>
-          </Col>
-          <Col className="col">
-            <Button size="sm" className={`btn btn-danger ${isEditing ? "invisible" : "visible"}`} onClick={
-              () => {
-                SetModalOpen(true);
-                SetRemoveIndex(index);
-              }
-            }>
+            <Button size="sm" variant="danger" className={`${isEditing ? "invisible" : "visible"}`}
+              style={{ minWidth: '70px' }}
+              onClick={
+                () => {
+                  SetModalOpen(true);
+                  SetRemoveIndex(index);
+                }
+              }>
               削除
             </Button>
           </Col>
-          <Col>
+          <Col className="col-md-2">
             <Button
               size="sm"
-              className={`btn btn-secondary ${isEditing || index === discordUsers.length - 1 ? "invisible" : "visible"}`}
+              variant="secondary"
+              className={`me-3 ${isEditing || index === discordUsers.length - 1 ? "invisible" : "visible"}`}
               onClick={() => moveDown(index)}
             >
               <FontAwesomeIcon icon={faArrowDown} />
             </Button>
-          </Col>
-          <Col>
             <Button
               size="sm"
-              className={`btn btn-secondary ${isEditing || index === 0 ? "invisible" : "visible"}`}
+              variant="secondary"
+              className={`${isEditing || index === 0 ? "invisible" : "visible"}`}
               onClick={() => moveUp(index)}
             >
               <FontAwesomeIcon icon={faArrowUp} />

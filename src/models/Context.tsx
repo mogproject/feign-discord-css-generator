@@ -116,7 +116,7 @@ export const ConfContext = React.createContext<Configuration>(defaultConf);
 const CHANNEL_URL_PATTERN = /^https:[/][/]discord.com[/]channels[/](\d+)[/](\d+)[/]?$/;
 
 export function isValidVoiceChannelURL(voiceChannelURL: string): boolean {
-  return !!voiceChannelURL.match(CHANNEL_URL_PATTERN);
+  return CHANNEL_URL_PATTERN.test(voiceChannelURL);
 }
 
 export function retrieveChannelIDs(voiceChannelURL: string): [string, string] {
