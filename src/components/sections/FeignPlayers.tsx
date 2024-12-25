@@ -24,21 +24,24 @@ export function FeignPlayers() {
     const targetIndex = discordUsers.findIndex((u: DiscordUser) => u.id === feignPlayers[color]);
 
     return (
-      <Col className="mb-3">
+      <Col key={`player-${color}`} className="mb-3">
         <Row className="justify-content-md-center mb-2">{COLOR_DESCRIPTION[color]}</Row>
         <Row className="justify-content-md-center mb-2">
           <img src={`assets/img/${FEI_COLORS[color]}-small.png`} width="80px" style={{ maxWidth: "80px" }} alt=""></img>
         </Row>
         <Row className="justify-content-md-center" style={{ marginTop: "-45px" }}>
-          <Form.Select onChange={(e) => handleUpdate(color, e.target.value)} size="sm"
+          <Form.Select
+            onChange={(e) => handleUpdate(color, e.target.value)}
+            value={targetIndex}
+            size="sm"
             className={targetIndex < 0 ? 'bg-secondary' : ''}
             style={{ width: "90%" }}>
-            <option selected={targetIndex < 0} value="-1">
+            <option value="-1">
               ----
             </option>
             {discordUsers.map((u: DiscordUser, i: number) => {
               return (
-                <option selected={i === targetIndex} value={i}>
+                <option key={`player-${color}-${i}`} value={i}>
                   {u.name}
                 </option>
               );

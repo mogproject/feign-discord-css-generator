@@ -98,7 +98,7 @@ export function DiscordUsers() {
 
     if (index === discordUserEditing.index) {
       return (
-        <Form noValidate validated={validated} onSubmit={handleSubmit}>
+        <Form key={`discord-${index}`} noValidate validated={validated} onSubmit={handleSubmit}>
           <Row className="row-cols-lg-auto align-items-center mb-1">
             <Col>
               <FontAwesomeIcon icon={faDiscord} />
@@ -148,7 +148,7 @@ export function DiscordUsers() {
       );
     } else {
       return (
-        <Row className="row-cols-lg-auto align-items-center mb-1">
+        <Row key={`discord-${index}`} className="row-cols-lg-auto align-items-center mb-1">
           <Col>
             <FontAwesomeIcon icon={faDiscord} />
           </Col>

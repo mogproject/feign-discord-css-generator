@@ -1,7 +1,9 @@
 import React from "react";
 import { ButtonGroup, Form, InputGroup } from "react-bootstrap";
 
-export function RadioButtonGroup(elementName: string, labels: string[], value: number, handleChange: (newValue: number) => void) {
+export function RadioButtonGroup(labels: string[], value: number, handleChange: (newValue: number) => void) {
+  const key = React.useId();
+
   function handleChangeInner(index: number) {
     return (e: React.ChangeEvent<HTMLInputElement>) => {
       if (e.target.checked) handleChange(index);
@@ -13,20 +15,20 @@ export function RadioButtonGroup(elementName: string, labels: string[], value: n
       <ButtonGroup>
         {labels.map((label: string, i: number) => {
           return (
-            <>
+            <div key={`${key}-${i}`}>
               <Form.Control
-                name={`${elementName}`}
-                id={`${elementName}-${i}`}
+                name={`${key}`}
+                id={`${key}-${i}`}
                 type="radio"
                 autoComplete="off"
                 checked={value === i}
                 onChange={handleChangeInner(i)}
                 className="btn-check"
               />
-              <label className="btn btn-outline-primary" htmlFor={`${elementName}-${i}`}>
+              <label className="btn btn-outline-primary" htmlFor={`${key}-${i}`}>
                 {label}
               </label>
-            </>
+            </div>
           );
         })}
       </ButtonGroup>
