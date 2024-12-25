@@ -6,9 +6,7 @@ import { Container, Row, Col, InputGroup, Form, Button, Modal } from "react-boot
 import { DiscordUser, ConfContext } from "../../models/Context";
 
 export function DiscordUsers() {
-  const { discordUsers, updateDiscordUsers } = React.useContext(ConfContext);
-  const [editIndex, setEditIndex] = React.useState(discordUsers.length);
-  const [editingUser, setEditingUser] = React.useState(editIndex === discordUsers.length ? { name: "", id: "" } : discordUsers[editIndex]);
+  const { discordUsers, discordUserEditing, updateDiscordUsers, cleanDiscordId, updateDiscordUserEditing } = React.useContext(ConfContext);
   const [validated, setValidated] = React.useState(false);
   const [modalOpen, SetModalOpen] = React.useState(false);
   const [removeIndex, SetRemoveIndex] = React.useState(-1);
@@ -20,33 +18,39 @@ export function DiscordUsers() {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
+    const isNewUser = discordUserEditing.index === discordUsers.length;
+
     // validate
-    const trimmedUser = { name: editingUser.name.trim(), id: editingUser.id.trim() };
+    const trimmedUser = { name: discordUserEditing.name.trim(), id: discordUserEditing.id.trim() };
 
     if (trimmedUser.name === "" || trimmedUser.id === "") {
       event.stopPropagation(); // empty items
       return;
     }
-    if (discordUsers.some((x, i) => i !== editIndex && x.name === trimmedUser.name)) {
+    if (discordUsers.some((x, i) => i !== discordUserEditing.index && x.name === trimmedUser.name)) {
       event.stopPropagation(); // name conflict
       return;
     }
-    if (discordUsers.some((x, i) => i !== editIndex && x.id === trimmedUser.id)) {
+    if (discordUsers.some((x, i) => i !== discordUserEditing.index && x.id === trimmedUser.id)) {
       event.stopPropagation(); // id conflict
       return;
     }
 
     // update
-    if (editIndex === discordUsers.length) {
+    if (isNewUser) {
       updateDiscordUsers([...discordUsers, trimmedUser]);
     } else {
-      updateDiscordUsers([...discordUsers.slice(0, editIndex), trimmedUser, ...discordUsers.slice(editIndex + 1)]);
+      if (trimmedUser.id !== discordUsers[discordUserEditing.index].id) {
+        // user id removed
+        cleanDiscordId(discordUsers[discordUserEditing.index].id);
+      }
+      updateDiscordUsers([...discordUsers.slice(0, discordUserEditing.index),
+        trimmedUser, ...discordUsers.slice(discordUserEditing.index + 1)
+      ]);
     }
 
     // create new row
     setValidated(false);
-    setEditingUser({ name: "", id: "" });
-    setEditIndex(discordUsers.length + (editIndex === discordUsers.length ? 1 : 0));
   }
   function moveDown(index: number) {
     if (index + 1 >= discordUsers.length) return;
@@ -64,20 +68,18 @@ export function DiscordUsers() {
   function startEdit(index: number) {
     if (index >= discordUsers.length) return;
     setValidated(true);
-    setEditingUser(discordUsers[index]);
-    setEditIndex(index);
+    updateDiscordUserEditing(index, discordUsers[index].name, discordUsers[index].id);
   }
   function cancelEdit() {
     setValidated(false);
-    setEditingUser({ name: "", id: "" });
-    setEditIndex(discordUsers.length);
+    updateDiscordUserEditing(discordUsers.length, '', '');
   }
   function removeItem(index: number) {
     if (index < 0 || index >= discordUsers.length) return;
+
+    cleanDiscordId(discordUsers[index].id);
     updateDiscordUsers([...discordUsers.slice(0, index), ...discordUsers.slice(index + 1)]);
     setValidated(false);
-    setEditingUser({ name: "", id: "" });
-    setEditIndex(discordUsers.length - 1);
   }
 
   const modalBody = () => {
@@ -92,9 +94,9 @@ export function DiscordUsers() {
   }
 
   function DiscordUserRow(user: DiscordUser, index: number) {
-    const isEditing = editIndex < discordUsers.length;
+    const isEditing = discordUserEditing.index < discordUsers.length;
 
-    if (index === editIndex) {
+    if (index === discordUserEditing.index) {
       return (
         <Form noValidate validated={validated} onSubmit={handleSubmit}>
           <Row className="row-cols-lg-auto align-items-center mb-1">
@@ -108,8 +110,8 @@ export function DiscordUsers() {
                   area-label={`discord-user-${index}`}
                   area-aria-describedby={`discord-user-${index}`}
                   required
-                  value={editingUser.name}
-                  onChange={(e) => setEditingUser({ ...editingUser, name: e.target.value })}
+                  value={discordUserEditing.name}
+                  onChange={(e) => updateDiscordUserEditing(index, e.target.value, discordUserEditing.id)}
                 />
                 <Form.Control.Feedback type="invalid" tooltip={true}>
                   ユーザー名を入力してください。
@@ -123,8 +125,8 @@ export function DiscordUsers() {
                   area-label={`discord-id-label-${index}`}
                   area-aria-describedby={`discord-id-${index}`}
                   required
-                  value={editingUser.id}
-                  onChange={(e) => setEditingUser({ ...editingUser, id: e.target.value })}
+                  value={discordUserEditing.id}
+                  onChange={(e) => updateDiscordUserEditing(index, discordUserEditing.name, e.target.value)}
                 />
                 <Form.Control.Feedback type="invalid" tooltip={true}>
                   Discord ユーザー ID を入力してください。
@@ -219,7 +221,7 @@ export function DiscordUsers() {
       {discordUsers.map((user, index) => {
         return DiscordUserRow(user, index);
       })}
-      {discordUsers.length === editIndex ? DiscordUserRow({ name: "", id: "" }, discordUsers.length) : <></>}
+      {discordUsers.length === discordUserEditing.index ? DiscordUserRow({ name: "", id: "" }, discordUsers.length) : <></>}
 
       <Modal show={modalOpen} onHide={handleModalClose}>
         <Modal.Header closeButton>

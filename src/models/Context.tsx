@@ -46,7 +46,10 @@ interface Configuration {
   channelID: string;
   updateVoiceChannelURL: (url: string) => void;
   discordUsers: DiscordUser[];
+  discordUserEditing: { index: number, name: string, id: string };
   updateDiscordUsers: (users: DiscordUser[]) => void;
+  cleanDiscordId: (id: string) => void;
+  updateDiscordUserEditing: (index: number, name: string, id: string) => void;
   feignPlayers: string[];
   updateFeignPlayers: (players: string[]) => void;
   viewSettings: ViewSettings;
@@ -95,7 +98,10 @@ export const defaultConf = {
   channelID: "",
   updateVoiceChannelURL: () => { },
   discordUsers: [],
+  discordUserEditing: { index: 0, name: '', id: '' },
   updateDiscordUsers: () => { },
+  cleanDiscordId: () => { },
+  updateDiscordUserEditing: () => { },
   feignPlayers: Array(13).fill(""),
   updateFeignPlayers: () => { },
   viewSettings: new ViewSettings(defaultFeiSettings, defaultAvatarSettings, defaultUsernameSettings),
