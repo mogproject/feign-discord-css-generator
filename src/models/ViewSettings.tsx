@@ -88,13 +88,12 @@ export class ViewSettings {
   getBottomElementRelative(): number { return Math.max(this.getFeiBottomRelative(), this.getAvatarBottomRelative(), this.getUsernameBottomRelative()); }
 
   // Margins (relative to their parent nodes).
-  getFeiMarginTop(): number { return ViewSettings.DEFAULT_TOP_MARGIN - this.getTopElementRelative(); }
-  getAvatarMarginTop(): number { return this.getAvatarTopRelative() - this.getFeiBottomRelative(); }
+  getFeiMarginTop(): number { return this.getFeiTopRelative() - this.getUsernameBottomRelative(); }
+  getAvatarMarginTop(): number { return ViewSettings.DEFAULT_TOP_MARGIN + this.getAvatarTopRelative() - this.getTopElementRelative(); }
   getUsernameMarginTop(): number { return this.getUsernameTopRelative() - this.getAvatarBottomRelative(); }
-  getUsernameMarginBottom(): number { return ViewSettings.DEFAULT_BOTTOM_MARGIN; }
-
+  
   // Overall height.
   getHeight(): number {
-    return this.getFeiMarginTop() + this.getBottomElementRelative() + ViewSettings.DEFAULT_BOTTOM_MARGIN;
+    return this.getAvatarMarginTop() + this.getBottomElementRelative() - this.getAvatarTopRelative() + ViewSettings.DEFAULT_BOTTOM_MARGIN;
   }
 };

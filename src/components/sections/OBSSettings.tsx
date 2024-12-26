@@ -1,10 +1,12 @@
 import React from "react";
-import { Container, Row, Col, InputGroup, Form, Alert } from "react-bootstrap";
+import { Container, Row, Col, InputGroup, Form, Alert, Button } from "react-bootstrap";
 import { ConfContext } from "../../models/Context";
 import { buildCSS } from "../../models/CSSBuilder";
 import { buildFeignImageCSS } from "../../models/FeignImageCSS";
 import { CopyButton } from "../buttons/CopyButton";
-import FileSaveButton from "../buttons/FileSaveButton";
+import FileSaver from "../../io/FileSaver";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDownload } from "@fortawesome/free-solid-svg-icons";
 
 export function OBSSettings() {
   const { feignPlayers, serverID, channelID, viewSettings } = React.useContext(ConfContext);
@@ -15,6 +17,8 @@ export function OBSSettings() {
   const obsURL = `https://streamkit.discord.com/overlay/voice/${serverID}/${channelID}`;
   const obsWidth = 1772 + viewSettings.fei.interval * 12;  // should support up to 13 users
   const obsHeight = viewSettings.getHeight();
+
+  const fileSaver = new FileSaver();
 
   return (<>
     <Container className={`mb-4${isValid ? ' d-none' : ''}`}>
@@ -67,7 +71,10 @@ export function OBSSettings() {
             <InputGroup>
               <InputGroup.Text id="obs-css">カスタム CSS</InputGroup.Text>
               {CopyButton(() => content, "クリップボードにコピー")}
-              {FileSaveButton(() => content, "ファイルとして保存", "feign.css", "outline-secondary")}
+              <Button variant="outline-secondary" onClick={() => fileSaver.saveTextToFile(() => content, 'feign.css')}>
+                <FontAwesomeIcon icon={faDownload} />
+                <span>&nbsp;ファイルとして保存</span>
+              </Button>
             </InputGroup>
           </Row>
         </Col>

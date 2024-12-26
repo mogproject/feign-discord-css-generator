@@ -2,7 +2,7 @@ import React from "react";
 import Header from "./components/Header";
 import { Container, Accordion } from "react-bootstrap";
 import { FeiSettings, AvatarSettings, UsernameSettings, ViewSettings } from './models/ViewSettings';
-import { DiscordUser, ConfContext, defaultConf, retrieveChannelIDs } from "./models/Context";
+import { DiscordUser, ConfContext, defaultConf, retrieveChannelIDs, players2array } from "./models/Context";
 import { DiscordUsers } from "./components/sections/DiscordUsers";
 import { FeignPlayers } from "./components/sections/FeignPlayers";
 import { Preview } from "./components/sections/Preview";
@@ -11,31 +11,8 @@ import { buildFeignImageCSS } from "./models/FeignImageCSS";
 import { OBSSettings } from "./components/sections/OBSSettings";
 import { DiscordVoiceChannel } from "./components/sections/DiscordVoiceChannel";
 import { ViewSettingsPane } from "./components/sections/ViewSettingsPane";
-import FileSaveButton from "./components/buttons/FileSaveButton";
-import FileLoadButton from './components/buttons/FileLoadButton';
 import Footer from "./components/Footer";
-
-interface AllSettings {
-  channelURL: string,
-  discordUsers: DiscordUser[],
-  feignPlayers: string[],
-  viewSettings: ViewSettings,
-}
-
-function settings2json(channelURL: string, discordUsers: DiscordUser[], feignPlayers: string[], viewSettings: ViewSettings) {
-  const data: AllSettings = {
-    channelURL: channelURL,
-    discordUsers: discordUsers,
-    feignPlayers: feignPlayers,
-    viewSettings: viewSettings
-  };
-  return JSON.stringify(data);
-}
-
-function players2array(feignPlayers: string[]) {
-  const numActivePlayers = feignPlayers.filter((id: string) => id !== '').length;
-  return Array(numActivePlayers).fill(false);
-}
+import SaveLoad from "./components/sections/SaveLoad";
 
 export default function App() {
   // Voice channel.
@@ -107,26 +84,6 @@ export default function App() {
   // Preview
   const [isSpeaking, setIsSpeaking] = React.useState(players2array(feignPlayers));
 
-  function loadSettingsFromFile(content: string): boolean {
-    try {
-      const data = JSON.parse(content);
-      if (!data) return false;
-
-      const settings = data['viewSettings'] || defaultConf.viewSettings;
-      updateVoiceChannelURL(data['channelURL'] || defaultConf.channelURL);
-      updateDiscordUsers(data['discordUsers'] || defaultConf.discordUsers);
-      const newFeignPlayers = data['feignPlayers'] || defaultConf.feignPlayers;
-      updateFeignPlayers(newFeignPlayers);
-      updateFeiSettings(settings.fei);
-      updateAvatarSettings(settings.avatar);
-      updateUsernameSettings(settings.username);
-
-      setIsSpeaking(players2array(newFeignPlayers));  // no one is speaking
-    } catch (e) {
-      return false;
-    }
-    return true;
-  }
   const viewSettings = new ViewSettings(feiSettings, avatarSettings, usernameSettings);
 
   return (
@@ -164,17 +121,7 @@ export default function App() {
             <li>簡易的なユーザー管理により、過去の情報を再利用できます。</li>
           </ul>
           <h2 id='settings'>設定</h2>
-          <Container className="mb-2 d-flex">
-            <div className="me-4">
-              {FileSaveButton(
-                () => settings2json(voiceChannelURL, discordUsers, feignPlayers, viewSettings),
-                '全ての設定を保存', 'feign-discord.json', 'outline-secondary', { minWidth: '200px' }
-              )}
-            </div>
-            <div>
-              {FileLoadButton(loadSettingsFromFile, '全ての設定を読み込み', 'outline-secondary', { minWidth: '200px' })}
-            </div>
-          </Container>
+          <SaveLoad />
 
           <Accordion defaultActiveKey={["0", "1", "2", "3"]} alwaysOpen className="mb-4">
             <Accordion.Item eventKey="0">

@@ -1,7 +1,7 @@
 import React from "react";
 import { AvatarSettings, AvatarShape, FeiSettings, UsernameSettings, ViewSettings } from "./ViewSettings";
 
-export const APP_VERSION = '0.0.1'
+export const APP_VERSION = '0.0.2'
 
 export interface DiscordUser {
   name: string;
@@ -126,4 +126,9 @@ export function isValidVoiceChannelURL(voiceChannelURL: string): boolean {
 export function retrieveChannelIDs(voiceChannelURL: string): [string, string] {
   const result = voiceChannelURL.match(CHANNEL_URL_PATTERN);
   return result ? [result[1], result[2]] : ["", ""];
+}
+
+export function players2array(feignPlayers: string[]) {
+  const numActivePlayers = feignPlayers.filter((id: string) => id !== '').length;
+  return Array(numActivePlayers).fill(false);
 }

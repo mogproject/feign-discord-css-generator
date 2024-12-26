@@ -44,7 +44,7 @@ export function buildCSS(feignPlayers: string[], settings: ViewSettings): string
       ? []
       : [
         // Character
-        `.voice_state[data-userid="${id}"]::before {`,
+        `.voice_state[data-userid="${id}"]::after {`,
         `  background-image: var(--feign-icon-${FEI_COLORS[i]});`,
         `  background-size: ${settings.getFeiWidth()}px ${settings.getFeiHeight()}px;`,
         "  display: inline-block;",
@@ -59,11 +59,11 @@ export function buildCSS(feignPlayers: string[], settings: ViewSettings): string
         "  top: 0px;",
         settings.fei.mirror ? "  -webkit-transform: scaleX(-1);" : "",
         settings.fei.mirror ? "  transform: scaleX(-1);" : "",
-        settings.avatar.front ? '' : '  z-index: 1;',
+        "  z-index: 1",
         "}",
 
         // Animation
-        `.wrapper_speaking[data-userid="${id}"]::before {`,
+        `.wrapper_speaking[data-userid="${id}"]::after {`,
         `  animation: ${animationString(settings.fei.speaking, "")};`,
         "  animation-fill-mode: forwards;",
         "  filter: brightness(100%);",
@@ -118,6 +118,7 @@ export function buildCSS(feignPlayers: string[], settings: ViewSettings): string
     "  filter: brightness(35%);",
     "  position: relative;",
     "  top: 0px;",
+    `  z-index: ${settings.avatar.front ? 2 : 0};`,
     "}",
 
     // Avatar speaking
@@ -131,7 +132,7 @@ export function buildCSS(feignPlayers: string[], settings: ViewSettings): string
     ".voice_username {",
     settings.username.show ? "" : "display: none;",
     `  height: ${settings.getUsernameHeight()}px;`,
-    `  margin: ${settings.getUsernameMarginTop()}px 0 ${settings.getUsernameMarginBottom()}px 0;`,
+    `  margin: ${settings.getUsernameMarginTop()}px 0 0 0;`,
     '  padding: 0;',
     "}",
     '[class*="Voice_name__"] {',
@@ -149,7 +150,7 @@ export function buildCSS(feignPlayers: string[], settings: ViewSettings): string
     "  display: block;",
     "  text-align: center;",
     "  position: relative;",
-    settings.avatar.front ? '' : '  z-index: 2;',
+    "  z-index: 3;",
     "}",
   ];
   return (
