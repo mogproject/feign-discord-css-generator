@@ -26,3 +26,7 @@ code {
   text-decoration: none;
   cursor: pointer;
 }
+
+.player-unused {
+  background-color: #e2e3e5;
+}

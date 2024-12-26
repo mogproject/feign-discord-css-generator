@@ -34,7 +34,7 @@ export function FeignPlayers() {
             onChange={(e) => handleUpdate(color, e.target.value)}
             value={targetIndex}
             size="sm"
-            className={targetIndex < 0 ? 'bg-secondary' : ''}
+            className={targetIndex < 0 ? 'player-unused' : ''}
             style={{ width: "90%" }}>
             <option value="-1">
               ----
