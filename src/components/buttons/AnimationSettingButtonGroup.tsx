@@ -2,6 +2,7 @@ import React from "react";
 import { ButtonGroup, Form, InputGroup } from "react-bootstrap";
 import { AnimationSettings } from "../../models/ViewSettings";
 import { ColorPicker } from "./ColorPicker";
+import { useTranslation } from "react-i18next";
 
 export function AnimationSettingButtonGroup(
   prefix: string,
@@ -9,6 +10,10 @@ export function AnimationSettingButtonGroup(
   showOutline: boolean,
   handleChange: (setting: AnimationSettings) => void
 ) {
+  const { t: translate } = useTranslation('translation', { keyPrefix: 'settings.overlay' });
+  const t = translate as ((s: string, o?: Record<string, string | boolean>) => string);
+  const tt = (k: string) => { return t(k, { keyPrefix: '' }) };
+
   const jsxJump = (
     <ButtonGroup className="me-5">
       <Form.Control
@@ -20,7 +25,7 @@ export function AnimationSettingButtonGroup(
         onChange={() => handleChange({ ...setting, jump: !setting.jump })}
       />
       <label className="btn btn-outline-primary" htmlFor={`${prefix}-jump`} style={{ minWidth: "96px" }}>
-        ぴょこぴょこ
+        {t('jump')}
       </label>
     </ButtonGroup>
   );
@@ -38,13 +43,13 @@ export function AnimationSettingButtonGroup(
           onChange={() => handleChange({ ...setting, flash: !setting.flash })}
         />
         <label className="btn btn-outline-primary" htmlFor={`${prefix}-flash`} style={{ minWidth: "96px" }}>
-          発光
+          {t('flash')}
         </label>
       </ButtonGroup>
 
       <InputGroup className="me-5">
-        <InputGroup.Text>色</InputGroup.Text>
-        {ColorPicker("発光色", setting.flashColor, (color) => handleChange({ ...setting, flashColor: color }))}
+        <InputGroup.Text>{tt('color')}</InputGroup.Text>
+        {ColorPicker(t('flash_color'), setting.flashColor, (color) => handleChange({ ...setting, flashColor: color }))}
       </InputGroup>
     </div>
   );
@@ -61,12 +66,12 @@ export function AnimationSettingButtonGroup(
           onChange={() => handleChange({ ...setting, outline: !setting.outline })}
         />
         <label className="btn btn-outline-primary" htmlFor={`${prefix}-outline`} style={{ minWidth: "96px" }}>
-          縁取り
+          {t('outline')}
         </label>
       </ButtonGroup>
       <InputGroup>
-        <InputGroup.Text className="">色</InputGroup.Text>
-        {ColorPicker("縁取り色", setting.outlineColor, (color) => handleChange({ ...setting, outlineColor: color }))}
+        <InputGroup.Text className="">{tt('color')}</InputGroup.Text>
+        {ColorPicker(t('outline_color'), setting.outlineColor, (color) => handleChange({ ...setting, outlineColor: color }))}
       </InputGroup>
     </div>
   );

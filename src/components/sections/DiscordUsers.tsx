@@ -1,11 +1,15 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
-// import { faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { Container, Row, Col, InputGroup, Form, Button, Modal } from "react-bootstrap";
 import { DiscordUser, ConfContext } from "../../models/Context";
+import { useTranslation } from "react-i18next";
 
 export function DiscordUsers() {
+  const { t: translate } = useTranslation('translation', { keyPrefix: 'settings.discord' });
+  const t = translate as ((s: string, o?: Record<string, string | boolean>) => string);
+  const tt = (k: string) => { return t(k, { keyPrefix: '' }) };
+
   const { discordUsers, discordUserEditing, updateDiscordUsers, cleanDiscordId, updateDiscordUserEditing } = React.useContext(ConfContext);
   const [modalOpen, setModalOpen] = React.useState(false);
   const [removeIndex, setRemoveIndex] = React.useState(-1);
@@ -77,9 +81,9 @@ export function DiscordUsers() {
 
   const modalBody = () => {
     if (removeIndex < 0 || discordUsers.length <= removeIndex) return <></>;
-    return (<><p>以下のユーザーを削除します。よろしいですか?</p>
+    return (<><p>{t('confirm_removal')}</p>
       <ul>
-        <li>名前: {discordUsers[removeIndex].name}</li>
+        <li>{tt('name')}: {discordUsers[removeIndex].name}</li>
         <li>ID: {discordUsers[removeIndex].id}</li>
       </ul>
     </>
@@ -94,28 +98,25 @@ export function DiscordUsers() {
       const isNameEmpty = nameTrimmed === '';
       const isNameUnique = discordUsers.every((user, i) => i === index || user.name !== nameTrimmed)
       const isNameValid = !isNameEmpty && isNameUnique;
-      const nameFeedback = `既に存在します: ${nameTrimmed}`;
+      const nameFeedback = `${t('already_exists')}: ${nameTrimmed}`;
       const idTrimmed = discordUserEditing.id.trim();
       const isIdEmpty = idTrimmed === '';
       const isIdDigitOnly = /^[0-9]+$/.test(idTrimmed);
       const isIdUnique = discordUsers.every((user, i) => i === index || user.id !== idTrimmed);
       const isIdValid = isIdDigitOnly && isIdUnique;
-      const idFeedback = isIdDigitOnly ? `既に存在します: ${idTrimmed}` : 'ID には数字のみ含まれます';
+      const idFeedback = isIdDigitOnly ? `${t('already_exists')}: ${idTrimmed}` : t('number_only');
 
       return (
         <Form key={`discord-${index}`} onSubmit={handleSubmit}>
           <Row className="mb-1">
-            {/* <Col className="col-md-1">
-              <FontAwesomeIcon icon={faDiscord} />
-            </Col> */}
             <Col className="col-md-3">
               <InputGroup size="sm" hasValidation>
-                <InputGroup.Text id={`discord-user-edit-${index}`}>名前</InputGroup.Text>
+                <InputGroup.Text id={`discord-user-edit-${index}`}>{tt('name')}</InputGroup.Text>
                 <Form.Control
                   area-label={`discord-user-edit-label-${index}`}
                   area-aria-describedby={`discord-user-edit-${index}`}
                   required={isEditing}
-                  placeholder="名前を入力"
+                  placeholder={t('name_placeholder')}
                   value={discordUserEditing.name}
                   isValid={!isNameEmpty && isNameValid}
                   isInvalid={!isNameEmpty && !isNameValid}
@@ -131,7 +132,7 @@ export function DiscordUsers() {
                   area-label={`discord-id-edit-label-${index}`}
                   area-aria-describedby={`discord-id-edit-${index}`}
                   required={isEditing}
-                  placeholder="Discord ID を入力"
+                  placeholder={t('id_placeholder')}
                   value={discordUserEditing.id}
                   isValid={!isIdEmpty && isIdValid}
                   isInvalid={!isIdEmpty && !isIdValid}
@@ -143,11 +144,11 @@ export function DiscordUsers() {
             <Col className="col-md-3">
               <Button type="submit" size="sm" variant="primary" className="me-3" disabled={!isNameValid || !isIdValid}
                 style={{ minWidth: '70px' }}>
-                {`${isEditing ? "保存" : "追加"}`}
+                {`${isEditing ? tt('save') : tt('add')}`}
               </Button>
               <Button size="sm" variant="secondary" className={`${isEditing ? "visible" : "invisible"}`} onClick={cancelEdit}
                 style={{ minWidth: '70px' }}>
-                キャンセル
+                {tt('cancel')}
               </Button>
             </Col>
           </Row>
@@ -158,7 +159,7 @@ export function DiscordUsers() {
         <Row key={`discord-${index}`} className="mb-1">
           <Col className="col-md-3">
             <InputGroup size="sm">
-              <InputGroup.Text id={`discord-user-${index}`}>名前</InputGroup.Text>
+              <InputGroup.Text id={`discord-user-${index}`}>{tt('name')}</InputGroup.Text>
               <Form.Control
                 area-label={`discord-user-${index}`}
                 area-aria-describedby={`discord-user-${index}`}
@@ -182,7 +183,7 @@ export function DiscordUsers() {
             <Button size="sm" variant="secondary" className={`me-3 ${isEditing ? "invisible" : "visible"}`}
               style={{ minWidth: '70px' }}
               onClick={() => startEdit(index)}>
-              編集
+              {tt('edit')}
             </Button>
             <Button size="sm" variant="danger" className={`${isEditing ? "invisible" : "visible"}`}
               style={{ minWidth: '70px' }}
@@ -192,7 +193,7 @@ export function DiscordUsers() {
                   setRemoveIndex(index);
                 }
               }>
-              削除
+              {tt('remove')}
             </Button>
           </Col>
           <Col className="col-md-2">
@@ -220,10 +221,7 @@ export function DiscordUsers() {
 
   return (
     <Container>
-      <p>Discord のユーザー ID を取得するには、まず「設定」 → 「詳細設定」 → 「開発者モード」を有効にします。
-        その後、対象のユーザーを右クリック → 「ユーザーIDをコピー」を行い、以下に貼り付けてください。
-        ここで登録する名前は、Discord 上の名前と異なっていても問題ありません。
-      </p>
+      <p>{t('description')}</p>
       {discordUsers.map((user, index) => {
         return DiscordUserRow(user, index);
       })}
@@ -231,20 +229,20 @@ export function DiscordUsers() {
 
       <Modal show={modalOpen} onHide={handleModalClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Discord ユーザーの削除</Modal.Title>
+          <Modal.Title>{t('removal')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {modalBody()}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleModalClose}>
-            キャンセル
+            {tt('cancel')}
           </Button>
           <Button variant="danger" onClick={() => {
             removeItem(removeIndex);
             handleModalClose();
           }}>
-            削除
+            {tt('remove')}
           </Button>
         </Modal.Footer>
       </Modal>

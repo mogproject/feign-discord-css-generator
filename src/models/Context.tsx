@@ -1,27 +1,12 @@
 import React from "react";
 import { AvatarSettings, AvatarShape, FeiSettings, UsernameSettings, ViewSettings } from "./ViewSettings";
+import packageJson from '../../package.json'; // Adjust the path as needed
 
-export const APP_VERSION = '0.0.2'
+export const APP_VERSION = packageJson.version
 
 export interface DiscordUser {
   name: string;
   id: string;
-}
-
-export enum FeiColor {
-  FeiWhite = 0,
-  FeiSalmon = 1,
-  FeiPurple = 2,
-  FeiGreen = 3,
-  FeiBlue = 4,
-  FeiRed = 5,
-  FeiYellow = 6,
-  FeiLime = 7,
-  FeiSky = 8,
-  FeiBrown = 9,
-  FeiPink = 10,
-  FeiRose = 11,
-  FeiOrange = 12,
 }
 
 export const FEI_COLORS: string[] = [
@@ -111,7 +96,7 @@ export const defaultConf = {
   updateAvatarSettings: () => { },
   updateUsernameSettings: () => { },
   isSpeaking: [],
-  updateIsSpeaking: () => {},
+  updateIsSpeaking: () => { },
 };
 
 // Create a global context.

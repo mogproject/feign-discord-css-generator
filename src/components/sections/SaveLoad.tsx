@@ -2,6 +2,7 @@ import { faDownload, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Button, ButtonGroup, Container, Dropdown, Modal } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import FileLoader from "../../io/FileLoader";
 import FileSaver from "../../io/FileSaver";
 import { ConfContext, defaultConf, DiscordUser, players2array } from "../../models/Context";
@@ -20,6 +21,8 @@ function settings2json(settings: { [key: string]: any }, anonymizeDiscordUsers: 
 }
 
 function SaveLoad() {
+  const { t: translate } = useTranslation('translation', { keyPrefix: 'settings.saveload' });
+  const t = translate as ((s: string) => string);
   const {
     channelURL,
     discordUsers,
@@ -82,39 +85,39 @@ function SaveLoad() {
             () => settings2json({ channelURL: channelURL, discordUsers: discordUsers, feignPlayers: feignPlayers, viewSettings: viewSettings }, false), 'feign-discord.json'
           )} style={{ minWidth: '200px' }}>
             <FontAwesomeIcon icon={faDownload} />
-            <span>&nbsp;ファイルとして保存</span>
+            <span>&nbsp;{t('save_all')}</span>
           </Button>
           <Dropdown.Toggle split variant='secondary'></Dropdown.Toggle>
           <Dropdown.Menu>
             <Dropdown.Item href='#'
               onClick={() => fileSaver.saveTextToFile(() => settings2json({ channelURL: channelURL, discordUsers: discordUsers, feignPlayers: feignPlayers }, false), 'feign-discord-players.json')}
-            >表示設定以外を保存</Dropdown.Item>
+            >{t('save_all_but_view')}</Dropdown.Item>
             <Dropdown.Item href='#'
               onClick={() => fileSaver.saveTextToFile(() => settings2json({ channelURL: channelURL, discordUsers: discordUsers, feignPlayers: feignPlayers }, true), 'feign-discord-player-ids.json')}
-            >表示設定以外を匿名化して保存</Dropdown.Item>
+            >{t('save_all_but_view_anonymized')}</Dropdown.Item>
             <Dropdown.Item href='#'
               onClick={() => fileSaver.saveTextToFile(() => settings2json({ viewSettings: viewSettings }, false), 'feign-discord-overlay.json')}
-            >表示設定のみを保存</Dropdown.Item>
+            >{t('save_view_only')}</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
 
         <Dropdown as={ButtonGroup} className="me-1">
           <Button variant='outline-secondary' style={{ minWidth: '200px' }}
             onClick={() => fileLoader.loadTextFromFile((s) => loadSettingsFromFile(s, true, true), setLoadMessage, 'json')}>
-            <FontAwesomeIcon icon={faUpload} />&nbsp;全ての設定を読み込み
+            <FontAwesomeIcon icon={faUpload} />&nbsp;{t('load_all')}
           </Button>
 
           <Dropdown.Toggle split variant='secondary'></Dropdown.Toggle>
           <Dropdown.Menu>
             <Dropdown.Item href='#'
               onClick={() => fileLoader.loadTextFromFile((s) => loadSettingsFromFile(s, true, false), setLoadMessage, 'json')}
-            >表示設定以外を読み込み</Dropdown.Item>
+            >{t('load_all_but_view')}</Dropdown.Item>
             <Dropdown.Item href='#'
               onClick={() => fileLoader.loadTextFromFile((s) => loadSettingsFromFile(s, false, true), setLoadMessage, 'json')}
-            >表示設定のみを読み込み</Dropdown.Item>
+            >{t('load_view_only')}</Dropdown.Item>
             <Dropdown.Item href='#'
               onClick={() => setModalOpen(true)}>
-              全ての設定を初期化
+              {t('initialize_all')}
             </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
@@ -123,15 +126,15 @@ function SaveLoad() {
 
       <Modal show={modalOpen} onHide={handleModalClose}>
         <Modal.Header closeButton>
-          <Modal.Title>初期設定に戻す</Modal.Title>
+          <Modal.Title>{t('initialization')}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>全ての設定を初期状態に戻します。よろしいですか?</Modal.Body>
+        <Modal.Body>{t('confirm_initialization')}</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleModalClose}>
-            キャンセル
+            {t('cancel')}
           </Button>
           <Button variant="primary" onClick={handleInitializeAll}>
-            初期設定に戻す
+            {t('initialize')}
           </Button>
         </Modal.Footer>
       </Modal>

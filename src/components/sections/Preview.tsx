@@ -1,8 +1,13 @@
 import React from "react";
 import { Alert, Container } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { ConfContext, DiscordUser } from "../../models/Context";
 
 export function Preview() {
+  const { t: translate } = useTranslation('translation', { keyPrefix: 'preview' });
+  const t = translate as ((s: string, o?: Record<string, string | boolean>) => string);
+  const tt = (k: string) => { return t(k, { keyPrefix: '' }) };
+
   const { discordUsers, feignPlayers, viewSettings, isSpeaking, updateIsSpeaking } = React.useContext(ConfContext);
 
   const activeIDs: string[] = feignPlayers.filter((id: string) => id !== "");
@@ -39,11 +44,10 @@ export function Preview() {
 
   return (<>
     <Container className={`mb-4${isValid ? ' d-none' : ''}`}>
-      <Alert className="alert-warning">Feign プレイヤーを追加してください。</Alert>
+      <Alert className="alert-warning">{tt('add_feign_player')}</Alert>
     </Container>
     <Container className={`mb-4${isValid ? '' : ' d-none'}`}>
-      {/* <Container className={`mb-4`}> */}
-      <p>アイコンをクリックすると会話状態が切り替わります。</p>
+      <p>{t('description')}</p>
       <div className="discord_preview user-select-none" style={{ overflowX: "scroll", backgroundColor: "#cccccc", height: paneHeight }}>
         <div className="Voice_voiceContainer__aaaaa voice_container">
           <ul className="Voice_voiceStates__aaaaa voice_states">

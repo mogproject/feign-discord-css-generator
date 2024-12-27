@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import "bootstrap/dist/css/bootstrap.min.css";
 import './styles/index.css';
 import './styles/discord.css';
+import "./i18n/config";
 import App from './App';
 
 const root = ReactDOM.createRoot(
