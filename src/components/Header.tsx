@@ -4,8 +4,16 @@ import { Container, Form, Nav, Navbar } from "react-bootstrap";
 import { APP_VERSION } from "../models/Context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faYoutube, faGithub } from "@fortawesome/free-brands-svg-icons";
+import { useTranslation } from "react-i18next";
 
 function Header() {
+  const { t: translate, i18n } = useTranslation();
+  const t = translate as ((s: string) => string);
+  const languages = [
+    { key: 'ja', nativeName: '日本語' },
+    { key: 'en', nativeName: 'English' },
+  ];
+
   return (
     <header>
       <Navbar fixed="top" bg="light" data-bs-theme="light" className="border-bottom">
@@ -13,15 +21,24 @@ function Header() {
           <Navbar.Brand href='#'>Feign-Discord CSS Generator</Navbar.Brand>
 
           <Nav className="me-auto">
-            <Nav.Link href="#features">特徴</Nav.Link>
-            <Nav.Link href="#settings">設定</Nav.Link>
-            <Nav.Link href="#preview">プレビュー</Nav.Link>
-            <Nav.Link href="#obs">OBS 設定</Nav.Link>
+            <Nav.Link href="#features">{t('features.features')}</Nav.Link>
+            <Nav.Link href="#settings">{t('settings.settings')}</Nav.Link>
+            <Nav.Link href="#preview">{t('preview.preview')}</Nav.Link>
+            <Nav.Link href="#obs">{t('obs.obs_settings')}</Nav.Link>
           </Nav>
 
           <Form className="form-inline">
             <Container className="d-flex">
               <small className="text-muted mt-2 me-3">v{APP_VERSION}</small>
+              <Form.Select
+                size="sm"
+                onChange={(e) => i18n.changeLanguage(e.target.value)}
+                value={i18n.resolvedLanguage}
+                className="me-3"
+              >
+                {languages.map(({ key, nativeName }) => (<option key={key} value={key}>{nativeName}</option>))}
+
+              </Form.Select>
               <a className="nav-link me-3" href="https://www.youtube.com/@mogproject" target="_blank" rel="noreferrer">
                 <FontAwesomeIcon icon={faYoutube} size="2x" />
               </a>

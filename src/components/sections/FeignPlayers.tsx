@@ -2,8 +2,7 @@ import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { ConfContext, DiscordUser, FEI_COLORS } from "../../models/Context";
 import Form from "react-bootstrap/Form";
-
-const COLOR_DESCRIPTION: string[] = ["白", "薄橙", "紫", "緑", "青", "赤", "黄色", "黄緑", "水色", "薄桃", "茶色", "濃桃", "濃橙"];
+import { useTranslation } from "react-i18next";
 
 export function FeignPlayers() {
   const { discordUsers, feignPlayers, updateFeignPlayers } = React.useContext(ConfContext);
@@ -23,9 +22,11 @@ export function FeignPlayers() {
   function FeignPlayer(color: number) {
     const targetIndex = discordUsers.findIndex((u: DiscordUser) => u.id === feignPlayers[color]);
 
+    const { t: translate } = useTranslation('translation', { keyPrefix: 'colors' });
+    const t = translate as ((s: string) => string);
     return (
       <Col key={`player-${color}`} className="mb-3">
-        <Row className="justify-content-md-center mb-2">{COLOR_DESCRIPTION[color]}</Row>
+        <Row className="justify-content-md-center mb-2">{t(FEI_COLORS[color])}</Row>
         <Row className="justify-content-md-center mb-2">
           <img src={`assets/img/${FEI_COLORS[color]}-small.png`} width="80px" style={{ maxWidth: "80px" }} alt=""></img>
         </Row>

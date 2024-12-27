@@ -7,8 +7,13 @@ import { CopyButton } from "../buttons/CopyButton";
 import FileSaver from "../../io/FileSaver";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
+import { useTranslation } from "react-i18next";
 
 export function OBSSettings() {
+  const { t: translate } = useTranslation('translation', { keyPrefix: 'obs' });
+  const t = translate as ((s: string, o?: Record<string, string | boolean>) => string);
+  const tt = (k: string) => { return t(k, { keyPrefix: '' }) };
+
   const { feignPlayers, serverID, channelID, viewSettings } = React.useContext(ConfContext);
   const isValid = feignPlayers.some((user) => user !== '');
 
@@ -22,10 +27,10 @@ export function OBSSettings() {
 
   return (<>
     <Container className={`mb-4${isValid ? ' d-none' : ''}`}>
-      <Alert className="alert-warning">Feign プレイヤーを追加してください。</Alert>
+      <Alert className="alert-warning">{tt('add_feign_player')}</Alert>
     </Container>
     <Container className={`mb-4${isValid ? '' : ' d-none'}`}>
-      <p className="mb-3">「ソース」 → 「ブラウザ」 のプロパティ画面にて、以下の内容を設定してください。</p>
+      <p className="mb-3">{t('description')}</p>
       <Row>
         <Col className="col-md-5">
           <img width="100%" src="assets/img/obs.png" alt=""></img>
@@ -37,7 +42,7 @@ export function OBSSettings() {
               <Form.Control
                 area-label="obs-url-label"
                 aria-describedby="obs-url"
-                value={channelID === "" ? "ボイスチャンネル URL が正しく設定されていません" : obsURL}
+                value={channelID === "" ? t('invalid_channel_url') : obsURL}
                 readOnly={true}
               />
               {CopyButton(() => obsURL, "", channelID === "")}
@@ -47,7 +52,7 @@ export function OBSSettings() {
           <Row className="mb-2">
             <Col>
               <InputGroup size="sm">
-                <InputGroup.Text id="obs-width">幅</InputGroup.Text>
+                <InputGroup.Text id="obs-width">{t('width')}</InputGroup.Text>
                 <Form.Control area-label="obs-width-label" aria-describedby="obs-width" value={obsWidth} readOnly={true} />
                 {CopyButton(() => obsWidth.toString())}
               </InputGroup>
@@ -55,7 +60,7 @@ export function OBSSettings() {
 
             <Col>
               <InputGroup size="sm">
-                <InputGroup.Text id="obs-height">高さ</InputGroup.Text>
+                <InputGroup.Text id="obs-height">{t('height')}</InputGroup.Text>
                 <Form.Control area-label="obs-height-label" aria-describedby="obs-height" value={obsHeight} readOnly={true} />
                 {CopyButton(() => obsHeight.toString())}
               </InputGroup>
@@ -63,17 +68,17 @@ export function OBSSettings() {
           </Row>
           <Row className="mb-4">
             <Col>
-              <small className="text-muted">これらより大きい値を入力しても、動作に影響はありません。</small>
+              <small className="text-muted">{t('size_notes')}</small>
             </Col>
           </Row>
 
           <Row className="mb-4">
             <InputGroup>
-              <InputGroup.Text id="obs-css">カスタム CSS</InputGroup.Text>
-              {CopyButton(() => content, "クリップボードにコピー")}
+              <InputGroup.Text id="obs-css">{t('custom_css')}</InputGroup.Text>
+              {CopyButton(() => content, t('copy_to_clipboard'))}
               <Button variant="outline-secondary" onClick={() => fileSaver.saveTextToFile(() => content, 'feign.css')}>
                 <FontAwesomeIcon icon={faDownload} />
-                <span>&nbsp;ファイルとして保存</span>
+                <span>&nbsp;{t('save_as_file')}</span>
               </Button>
             </InputGroup>
           </Row>

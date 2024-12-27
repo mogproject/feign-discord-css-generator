@@ -5,10 +5,10 @@ class FileSaver {
     this.isFileSystemAccessApiSupported = !!window.showSaveFilePicker;
   }
 
-  inferDataType(extension: string): { description: string, accept: { [key: string]: Array<string> } } {
-    if (extension === 'txt') return { description: "Text file", accept: { "text/plain": ["." + extension] } };
-    if (extension === 'json') return { description: "JSON file", accept: { "text/plain": ["." + extension] } };
-    if (extension === 'css') return { description: "CSS file", accept: { "text/plain": ["." + extension] } };
+  inferDataType(extension: string): FilePickerAcceptType {
+    if (extension === 'txt') return { description: "Text file", accept: { "text/plain": ["." + extension] as `.${string}`[] } };
+    if (extension === 'json') return { description: "JSON file", accept: { "text/plain": ["." + extension] as `.${string}`[] } };
+    if (extension === 'css') return { description: "CSS file", accept: { "text/plain": ["." + extension] as `.${string}`[] } };
 
     // not implemented yet
     return { description: "Unknown", accept: {} };

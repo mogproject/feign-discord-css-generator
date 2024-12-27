@@ -5,8 +5,13 @@ import { ConfContext, defaultConf } from "../../models/Context";
 import { RadioButtonGroup } from "../buttons/RadioButtonGroup";
 import { ColorPicker } from "../buttons/ColorPicker";
 import { AnimationSettingButtonGroup } from "../buttons/AnimationSettingButtonGroup";
+import { useTranslation } from "react-i18next";
 
 export function ViewSettingsPane() {
+  const { t: translate } = useTranslation('translation', { keyPrefix: 'settings.overlay' });
+  const t = translate as ((s: string, o?: Record<string, string | boolean>) => string);
+  const tt = (k: string) => { return t(k, { keyPrefix: '' }) };
+
   const { viewSettings, updateFeiSettings, updateAvatarSettings, updateUsernameSettings } = React.useContext(ConfContext);
   const [modalOpen, setModalOpen] = React.useState(false);
   const handleModalClose = () => setModalOpen(false);
@@ -20,20 +25,20 @@ export function ViewSettingsPane() {
   return (
     <Container>
       <Button className="btn-secondary mb-3" onClick={() => setModalOpen(true)}>
-        初期設定に戻す
+        {t('initialize')}
       </Button>
 
       <Modal show={modalOpen} onHide={handleModalClose}>
         <Modal.Header closeButton>
-          <Modal.Title>初期設定に戻す</Modal.Title>
+          <Modal.Title>{t('initialization')}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>表示設定を初期状態に戻します。よろしいですか?</Modal.Body>
+        <Modal.Body>{t('initialization_description')}</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleModalClose}>
-            キャンセル
+            {tt('cancel')}
           </Button>
           <Button variant="primary" onClick={handleInitialize}>
-            初期設定に戻す
+            {t('initialize')}
           </Button>
         </Modal.Footer>
       </Modal>
@@ -43,16 +48,16 @@ export function ViewSettingsPane() {
       <div className="view-settings">
         <Accordion defaultActiveKey={["0", "1", "2"]} alwaysOpen>
           <Accordion.Item eventKey="0">
-            <Accordion.Header>Feign キャラクター</Accordion.Header>
+            <Accordion.Header>{t('feign_characters')}</Accordion.Header>
             <Accordion.Body>
               <Row className="mb-2">
-                <Col className="col-md-2">顔の向き</Col>
+                <Col className="col-md-2">{t('facing')}</Col>
                 <Col className="col-md-2">
-                  {RadioButtonGroup(["左向き", "右向き"], viewSettings.fei.mirror ? 0 : 1, (index: number) => {
+                  {RadioButtonGroup([t('facing_left'), t('facing_right')], viewSettings.fei.mirror ? 0 : 1, (index: number) => {
                     updateFeiSettings({ ...viewSettings.fei, mirror: index === 0 });
                   })}
                 </Col>
-                <Col className="offset-md-3 col-md-2 text-end">間隔</Col>
+                <Col className="offset-md-3 col-md-2 text-end">{t('interval')}</Col>
                 <Col className="col-md-2">
                   <Form.Control
                     type="number"
@@ -67,7 +72,7 @@ export function ViewSettingsPane() {
                 </Col>
               </Row>
               <Row>
-                <Col className="col-md-2">会話中の動作</Col>
+                <Col className="col-md-2">{t('speaking_behavior')}</Col>
                 <Col className="col-md-9">
                   {AnimationSettingButtonGroup("fei-speaking", viewSettings.fei.speaking, false, (setting: AnimationSettings) =>
                     updateFeiSettings({ ...viewSettings.fei, speaking: setting })
@@ -78,10 +83,10 @@ export function ViewSettingsPane() {
           </Accordion.Item>
 
           <Accordion.Item eventKey="1">
-            <Accordion.Header>Discord アバター</Accordion.Header>
+            <Accordion.Header>{t('discord_avatar')}</Accordion.Header>
             <Accordion.Body>
               <Row className="mb-2">
-                <Col className="col-md-2">表示</Col>
+                <Col className="col-md-2">{tt('show')}</Col>
                 <Col className="col-md-4">
                   <Form.Check className="form-switch">
                     <Form.Check.Input
@@ -93,7 +98,7 @@ export function ViewSettingsPane() {
                   </Form.Check>
                 </Col>
 
-                <Col className="offset-md-1 col-md-2 text-end">前面に表示</Col>
+                <Col className="offset-md-1 col-md-2 text-end">{t('show_front')}</Col>
                 <Col className="col-md-2">
                   <Form.Check className="form-switch">
                     <Form.Check.Input
@@ -107,10 +112,10 @@ export function ViewSettingsPane() {
               </Row>
 
               <Row className="mb-2">
-                <Col className="col-md-2">形状</Col>
+                <Col className="col-md-2">{t('shape')}</Col>
 
                 <Col className="col-md-4">
-                  {RadioButtonGroup(["丸", "角丸四角", "四角"], viewSettings.avatar.shape.valueOf(), (index) => {
+                  {RadioButtonGroup([t('circle'), t('rounded_rectangle'), t('rectangle')], viewSettings.avatar.shape.valueOf(), (index) => {
                     updateAvatarSettings({
                       ...viewSettings.avatar,
                       shape: [AvatarShape.Circle, AvatarShape.RoundedRectangle, AvatarShape.Rectangle][index],
@@ -118,7 +123,7 @@ export function ViewSettingsPane() {
                   })}
                 </Col>
 
-                <Col className="offset-md-1 col-md-2 text-end">縦位置調整</Col>
+                <Col className="offset-md-1 col-md-2 text-end">{t('vertical_offset')}</Col>
                 <Col className="col-md-2">
                   <Form.Control
                     type="number"
@@ -134,7 +139,7 @@ export function ViewSettingsPane() {
               </Row>
 
               <Row>
-                <Col className="col-md-2">会話中の動作</Col>
+                <Col className="col-md-2">{t('speaking_behavior')}</Col>
                 <Col className="col-md-9">
                   {AnimationSettingButtonGroup("avatar-speaking", viewSettings.avatar.speaking, true, (setting: AnimationSettings) =>
                     updateAvatarSettings({ ...viewSettings.avatar, speaking: setting })
@@ -145,10 +150,10 @@ export function ViewSettingsPane() {
           </Accordion.Item>
 
           <Accordion.Item eventKey="2">
-            <Accordion.Header>ユーザー名</Accordion.Header>
+            <Accordion.Header>{t('username')}</Accordion.Header>
             <Accordion.Body>
               <Row className="mb-2">
-                <Col className="col-md-2">表示</Col>
+                <Col className="col-md-2">{tt('show')}</Col>
                 <Col className="col-md-4">
                   <Form.Check className="form-switch">
                     <Form.Check.Input
@@ -162,10 +167,10 @@ export function ViewSettingsPane() {
               </Row>
 
               <Row>
-                <Col className="col-md-2">フォント</Col>
+                <Col className="col-md-2">{t('font')}</Col>
                 <Col className="col-md-5">
                   <InputGroup>
-                    <InputGroup.Text>サイズ</InputGroup.Text>
+                    <InputGroup.Text>{t('size')}</InputGroup.Text>
                     <Form.Control
                       type="number"
                       value={viewSettings.username.fontSize}
@@ -176,18 +181,18 @@ export function ViewSettingsPane() {
                         updateUsernameSettings({ ...viewSettings.username, fontSize: parseInt(e.target.value) });
                       }}
                     />
-                    <InputGroup.Text>色</InputGroup.Text>
-                    {ColorPicker("フォント色", viewSettings.username.fontColor, (color) =>
+                    <InputGroup.Text>{tt('color')}</InputGroup.Text>
+                    {ColorPicker(t('font_color'), viewSettings.username.fontColor, (color) =>
                       updateUsernameSettings({ ...viewSettings.username, fontColor: color })
                     )}
-                    <InputGroup.Text>背景色</InputGroup.Text>
-                    {ColorPicker("背景色", viewSettings.username.backgroundColor, (color) =>
+                    <InputGroup.Text>{t('background')}</InputGroup.Text>
+                    {ColorPicker(t('background_color'), viewSettings.username.backgroundColor, (color) =>
                       updateUsernameSettings({ ...viewSettings.username, backgroundColor: color })
                     )}
                   </InputGroup>
                 </Col>
 
-                <Col className="col-md-2 text-end">縦位置調整</Col>
+                <Col className="col-md-2 text-end">{t('vertical_offset')}</Col>
                 <Col className="col-md-2">
                   <Form.Control
                     type="number"

@@ -13,8 +13,13 @@ import { DiscordVoiceChannel } from "./components/sections/DiscordVoiceChannel";
 import { ViewSettingsPane } from "./components/sections/ViewSettingsPane";
 import Footer from "./components/Footer";
 import SaveLoad from "./components/sections/SaveLoad";
+import { useTranslation } from "react-i18next";
 
 export default function App() {
+  // Translations.
+  const { t: translate } = useTranslation();
+  const t = translate as ((s: string) => string);
+
   // Voice channel.
   const initialVoiceChannelURL: string = localStorage.getItem("voice_channel_url") || "";
   const [voiceChannelURL, setVoiceChannelURL] = React.useState(initialVoiceChannelURL);
@@ -112,49 +117,49 @@ export default function App() {
       >
         <Container style={{ marginTop: "60px", paddingTop: "5px" }}>
           <p>
-            <small>全ての設定は、お使いのブラウザにのみ保存されます。設定内容が外部に送信されることはありません。</small>
+            <small>{t('features.part1')}</small>
           </p>
-          <h2 id='features'>特徴</h2>
+          <h2 id='features'>{t('features.features')}</h2>
           <ul>
-            <li>単一の CSS で Discord アイコンと Feign のキャラクターを同時に表示します。</li>
-            <li>CSS 内部に画像情報を保存しているため、外部依存を減らすことができます。</li>
-            <li>簡易的なユーザー管理により、過去の情報を再利用できます。</li>
+            <li>{t('features.part2')}</li>
+            <li>{t('features.part3')}</li>
+            <li>{t('features.part4')}</li>
           </ul>
-          <h2 id='settings'>設定</h2>
+          <h2 id='settings'>{t('settings.settings')}</h2>
           <SaveLoad />
 
           <Accordion defaultActiveKey={["0", "1", "2", "3"]} alwaysOpen className="mb-4">
             <Accordion.Item eventKey="0">
-              <Accordion.Header>Discord ボイスチャンネル</Accordion.Header>
+              <Accordion.Header>{t('settings.discord_voice_channel')}</Accordion.Header>
               <Accordion.Body>
                 <DiscordVoiceChannel />
               </Accordion.Body>
             </Accordion.Item>
 
             <Accordion.Item eventKey="1">
-              <Accordion.Header>Discord ユーザー管理</Accordion.Header>
+              <Accordion.Header>{t('settings.discord_user_management')}</Accordion.Header>
               <Accordion.Body>
                 <DiscordUsers />
               </Accordion.Body>
             </Accordion.Item>
 
             <Accordion.Item eventKey="2">
-              <Accordion.Header>Feign プレイヤー設定</Accordion.Header>
+              <Accordion.Header>{t('settings.feign_player_settings')}</Accordion.Header>
               <Accordion.Body>
                 <FeignPlayers />
               </Accordion.Body>
             </Accordion.Item>
 
             <Accordion.Item eventKey="3">
-              <Accordion.Header>オーバーレイ詳細設定</Accordion.Header>
+              <Accordion.Header>{t('settings.overlay_settings')}</Accordion.Header>
               <Accordion.Body>
                 <ViewSettingsPane />
               </Accordion.Body>
             </Accordion.Item>
           </Accordion>
-          <h2 id='preview'>プレビュー</h2>
+          <h2 id='preview'>{t('preview.preview')}</h2>
           <Preview />
-          <h2 id='obs'>OBS 設定</h2>
+          <h2 id='obs'>{t('obs.obs_settings')}</h2>
           <OBSSettings />
         </Container>
       </ConfContext.Provider>
