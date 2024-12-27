@@ -69,18 +69,16 @@ export class ViewSettings {
   getFeiTopRelative(): number { return 0; }
   getFeiBottomRelative(): number { return this.getFeiHeight(); }
   getAvatarTopRelative(): number {
-    return this.getFeiBottomRelative() +
-      (this.avatar.show ? (this.avatar.offsetY - ViewSettings.DEFAULT_AVATAR_OVERLAP) : 0);
+    return this.getFeiBottomRelative() + this.avatar.offsetY - ViewSettings.DEFAULT_AVATAR_OVERLAP;
   }
   getAvatarBottomRelative(): number {
-    return this.getAvatarTopRelative() + (this.avatar.show ? this.getAvatarHeight() : 0);
+    return this.getAvatarTopRelative() + this.getAvatarHeight();
   }
   getUsernameTopRelative(): number {
-    return this.getAvatarBottomRelative() +
-      (this.username.show ? (this.username.offsetY - ViewSettings.DEFAULT_USERNAME_OVERLAP) : 0);
+    return this.getAvatarBottomRelative() + this.username.offsetY - ViewSettings.DEFAULT_USERNAME_OVERLAP;
   }
   getUsernameBottomRelative(): number {
-    return this.getUsernameTopRelative() + (this.username.show ? this.getUsernameHeight() : 0);
+    return this.getUsernameTopRelative() + this.getUsernameHeight();
   }
 
   // Top-most and bottom-most elements.
@@ -88,10 +86,24 @@ export class ViewSettings {
   getBottomElementRelative(): number { return Math.max(this.getFeiBottomRelative(), this.getAvatarBottomRelative(), this.getUsernameBottomRelative()); }
 
   // Margins (relative to their parent nodes).
-  getFeiMarginTop(): number { return this.getFeiTopRelative() - this.getUsernameBottomRelative(); }
+  getFeiMarginTop(): number {
+    if (this.username.show) {
+      return this.getFeiTopRelative() - this.getUsernameBottomRelative();
+    } else if (this.avatar.show) {
+      return this.getFeiTopRelative() - this.getAvatarBottomRelative();
+    } else {
+      return this.getAvatarMarginTop() - this.getAvatarTopRelative();
+    }
+  }
   getAvatarMarginTop(): number { return ViewSettings.DEFAULT_TOP_MARGIN + this.getAvatarTopRelative() - this.getTopElementRelative(); }
-  getUsernameMarginTop(): number { return this.getUsernameTopRelative() - this.getAvatarBottomRelative(); }
-  
+  getUsernameMarginTop(): number {
+    if (this.avatar.show) {
+      return this.getUsernameTopRelative() - this.getAvatarBottomRelative();
+    } else {
+      return this.getAvatarMarginTop() + this.getUsernameTopRelative() - this.getAvatarTopRelative();
+    }
+  }
+
   // Overall height.
   getHeight(): number {
     return this.getAvatarMarginTop() + this.getBottomElementRelative() - this.getAvatarTopRelative() + ViewSettings.DEFAULT_BOTTOM_MARGIN;
