@@ -83,7 +83,7 @@ function SaveLoad() {
         <Dropdown as={ButtonGroup} className="me-4">
           <Button variant="outline-secondary" onClick={() => fileSaver.saveTextToFile(
             () => settings2json({ channelURL: channelURL, discordUsers: discordUsers, feignPlayers: feignPlayers, viewSettings: viewSettings }, false), 'feign-discord.json'
-          )} style={{ minWidth: '200px' }}>
+          )} style={{ minWidth: '180px' }}>
             <FontAwesomeIcon icon={faDownload} />
             <span>&nbsp;{t('save_all')}</span>
           </Button>
@@ -102,7 +102,7 @@ function SaveLoad() {
         </Dropdown>
 
         <Dropdown as={ButtonGroup} className="me-1">
-          <Button variant='outline-secondary' style={{ minWidth: '200px' }}
+          <Button variant='outline-secondary' style={{ minWidth: '180px' }}
             onClick={() => fileLoader.loadTextFromFile((s) => loadSettingsFromFile(s, true, true), setLoadMessage, 'json')}>
             <FontAwesomeIcon icon={faUpload} />&nbsp;{t('load_all')}
           </Button>
