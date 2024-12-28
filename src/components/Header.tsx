@@ -20,7 +20,7 @@ function Header() {
         <Container>
           <Navbar.Brand href='#'>Feign-Discord CSS Generator</Navbar.Brand>
 
-          <Nav className="me-auto">
+          <Nav className="me-auto d-none d-lg-flex">
             <Nav.Link href="#features">{t('features.features')}</Nav.Link>
             <Nav.Link href="#settings">{t('settings.settings')}</Nav.Link>
             <Nav.Link href="#preview">{t('preview.preview')}</Nav.Link>
@@ -34,15 +34,14 @@ function Header() {
                 size="sm"
                 onChange={(e) => i18n.changeLanguage(e.target.value)}
                 value={i18n.resolvedLanguage}
-                className="me-3"
               >
                 {languages.map(({ key, nativeName }) => (<option key={key} value={key}>{nativeName}</option>))}
-
               </Form.Select>
-              <a className="nav-link me-3" href="https://www.youtube.com/@mogproject" target="_blank" rel="noreferrer">
+
+              <a className="nav-link d-none d-md-block ms-3 me-3" href="https://www.youtube.com/@mogproject" target="_blank" rel="noreferrer">
                 <FontAwesomeIcon icon={faYoutube} size="2x" />
               </a>
-              <a className="nav-link" href="https://github.com/mogproject/feign-discord-css-generator/" target="_blank" rel="noreferrer">
+              <a className="nav-link d-none d-md-block" href="https://github.com/mogproject/feign-discord-css-generator/" target="_blank" rel="noreferrer">
                 <FontAwesomeIcon icon={faGithub} size="2x" />
               </a>
             </Container>

@@ -25,9 +25,9 @@ export function FeignPlayers() {
     const { t: translate } = useTranslation('translation', { keyPrefix: 'colors' });
     const t = translate as ((s: string) => string);
     return (
-      <Col key={`player-${color}`} className="mb-3">
-        <Row className="justify-content-md-center mb-2">{t(FEI_COLORS[color])}</Row>
-        <Row className="justify-content-md-center mb-2">
+      <Col key={`player-${color}`} className="mb-3 col-1-5 col-lg-1-7">
+        <Row className="justify-content-center mb-2">{t(FEI_COLORS[color])}</Row>
+        <Row className="justify-content-center mb-2">
           <img src={`assets/img/${FEI_COLORS[color]}-small.png`} width="80px" style={{ maxWidth: "80px" }} alt=""></img>
         </Row>
         <Row className="justify-content-md-center" style={{ marginTop: "-45px" }}>
@@ -56,19 +56,11 @@ export function FeignPlayers() {
   return (
     <Container>
       <Row>
-        {Array(7)
+        {Array(13)
           .fill(0)
           .map((_, i: number) => {
             return FeignPlayer(i);
           })}
-      </Row>
-      <Row>
-        {Array(6)
-          .fill(0)
-          .map((_, i: number) => {
-            return FeignPlayer(7 + i);
-          })}
-        <Col></Col>
       </Row>
     </Container>
   );

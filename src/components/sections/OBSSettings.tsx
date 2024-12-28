@@ -32,7 +32,7 @@ export function OBSSettings() {
     <Container className={`mb-4${isValid ? '' : ' d-none'}`}>
       <p className="mb-3">{t('description')}</p>
       <Row>
-        <Col className="col-md-5">
+        <Col className="d-none d-md-block col-md-5">
           <img width="100%" src="assets/img/obs.png" alt=""></img>
         </Col>
         <Col>
@@ -72,13 +72,26 @@ export function OBSSettings() {
             </Col>
           </Row>
 
-          <Row className="mb-4">
+          {/* large screen */}
+          <Row className="mb-4 d-none d-xl-block">
             <InputGroup>
-              <InputGroup.Text id="obs-css">{t('custom_css')}</InputGroup.Text>
+              <InputGroup.Text>{t('custom_css')}</InputGroup.Text>
               {CopyButton(() => content, t('copy_to_clipboard'))}
               <Button variant="outline-secondary" onClick={() => fileSaver.saveTextToFile(() => content, 'feign.css')}>
                 <FontAwesomeIcon icon={faDownload} />
                 <span>&nbsp;{t('save_as_file')}</span>
+              </Button>
+            </InputGroup>
+          </Row>
+
+          {/* small screen */}
+          <Row className="mb-4 d-xl-none">
+            <InputGroup>
+              <InputGroup.Text>{t('custom_css')}</InputGroup.Text>
+              {CopyButton(() => content, tt('copy'))}
+              <Button variant="outline-secondary" onClick={() => fileSaver.saveTextToFile(() => content, 'feign.css')}>
+                <FontAwesomeIcon icon={faDownload} />
+                <span>&nbsp;{tt('save')}</span>
               </Button>
             </InputGroup>
           </Row>

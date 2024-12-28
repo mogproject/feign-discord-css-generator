@@ -1,5 +1,5 @@
 import React from "react";
-import { ButtonGroup, Form, InputGroup } from "react-bootstrap";
+import { ButtonGroup, Col, Form, InputGroup, Row } from "react-bootstrap";
 import { AnimationSettings } from "../../models/ViewSettings";
 import { ColorPicker } from "./ColorPicker";
 import { useTranslation } from "react-i18next";
@@ -15,7 +15,7 @@ export function AnimationSettingButtonGroup(
   const tt = (k: string) => { return t(k, { keyPrefix: '' }) };
 
   const jsxJump = (
-    <ButtonGroup className="me-5">
+    <ButtonGroup>
       <Form.Control
         type="checkbox"
         id={`${prefix}-jump`}
@@ -38,16 +38,15 @@ export function AnimationSettingButtonGroup(
           id={`${prefix}-flash`}
           className="btn-check"
           autoComplete="off"
-          style={{ width: "160px" }}
           checked={setting.flash}
           onChange={() => handleChange({ ...setting, flash: !setting.flash })}
         />
-        <label className="btn btn-outline-primary" htmlFor={`${prefix}-flash`} style={{ minWidth: "96px" }}>
+        <label className="btn btn-outline-primary" htmlFor={`${prefix}-flash`} style={{ minWidth: "80px" }}>
           {t('flash')}
         </label>
       </ButtonGroup>
 
-      <InputGroup className="me-5">
+      <InputGroup>
         <InputGroup.Text>{tt('color')}</InputGroup.Text>
         {ColorPicker(t('flash_color'), setting.flashColor, (color) => handleChange({ ...setting, flashColor: color }))}
       </InputGroup>
@@ -65,7 +64,7 @@ export function AnimationSettingButtonGroup(
           checked={setting.outline}
           onChange={() => handleChange({ ...setting, outline: !setting.outline })}
         />
-        <label className="btn btn-outline-primary" htmlFor={`${prefix}-outline`} style={{ minWidth: "96px" }}>
+        <label className="btn btn-outline-primary" htmlFor={`${prefix}-outline`} style={{ minWidth: "80px" }}>
           {t('outline')}
         </label>
       </ButtonGroup>
@@ -77,10 +76,10 @@ export function AnimationSettingButtonGroup(
   );
 
   return (
-    <div className="d-flex">
-      {jsxJump}
-      {jsxFlash}
-      {showOutline ? jsxOutline : ""}
-    </div>
+    <Row>
+      <Col className="col-5 col-md-5 mb-1 col-lg-3">{jsxJump}</Col>
+      <Col className={`col-7 col-md-7 ${showOutline ? 'mb-1 ' : ''}col-lg-4 col-xl-4 px-lg-0`}>{jsxFlash}</Col>
+      <Col className="col-7 col-md-6 col-lg-4 col-lg-4 px-lg-0">{showOutline ? jsxOutline : ""}</Col>
+    </Row>
   );
 }

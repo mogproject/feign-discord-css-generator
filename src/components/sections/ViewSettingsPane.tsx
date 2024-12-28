@@ -51,14 +51,14 @@ export function ViewSettingsPane() {
             <Accordion.Header>{t('feign_characters')}</Accordion.Header>
             <Accordion.Body>
               <Row className="mb-2">
-                <Col className="col-md-2">{t('facing')}</Col>
-                <Col className="col-md-2">
+                <Col className="col-6 col-md-2 my-auto">{t('facing')}</Col>
+                <Col className="col-6 col-md-4 mb-2 mb-md-0">
                   {RadioButtonGroup([t('facing_left'), t('facing_right')], viewSettings.fei.mirror ? 0 : 1, (index: number) => {
                     updateFeiSettings({ ...viewSettings.fei, mirror: index === 0 });
                   })}
                 </Col>
-                <Col className="offset-md-3 col-md-2 text-end">{t('interval')}</Col>
-                <Col className="col-md-2">
+                <Col className="col-6 offset-md-1 col-md-3 text-md-end my-auto">{t('interval')}</Col>
+                <Col className="col-6 col-md-2">
                   <Form.Control
                     type="number"
                     value={viewSettings.fei.interval}
@@ -72,8 +72,8 @@ export function ViewSettingsPane() {
                 </Col>
               </Row>
               <Row>
-                <Col className="col-md-2">{t('speaking_behavior')}</Col>
-                <Col className="col-md-9">
+                <Col className="col-12 col-md-2 my-auto">{t('speaking_behavior')}</Col>
+                <Col className="col-12 col-md-9">
                   {AnimationSettingButtonGroup("fei-speaking", viewSettings.fei.speaking, false, (setting: AnimationSettings) =>
                     updateFeiSettings({ ...viewSettings.fei, speaking: setting })
                   )}
@@ -86,8 +86,8 @@ export function ViewSettingsPane() {
             <Accordion.Header>{t('discord_avatar')}</Accordion.Header>
             <Accordion.Body>
               <Row className="mb-2">
-                <Col className="col-md-2">{tt('show')}</Col>
-                <Col className="col-md-4">
+                <Col className="col-6 col-md-2 mb-2 mb-md-0">{tt('show')}</Col>
+                <Col className="col-6 col-md-3">
                   <Form.Check className="form-switch">
                     <Form.Check.Input
                       type="checkbox"
@@ -98,8 +98,8 @@ export function ViewSettingsPane() {
                   </Form.Check>
                 </Col>
 
-                <Col className="offset-md-1 col-md-2 text-end">{t('show_front')}</Col>
-                <Col className="col-md-2">
+                <Col className="col-6 offset-md-2 col-md-3 text-md-end">{t('show_front')}</Col>
+                <Col className="col-6 col-md-2">
                   <Form.Check className="form-switch">
                     <Form.Check.Input
                       type='checkbox'
@@ -112,9 +112,9 @@ export function ViewSettingsPane() {
               </Row>
 
               <Row className="mb-2">
-                <Col className="col-md-2">{t('shape')}</Col>
+                <Col className="col-12 col-md-2 my-auto">{t('shape')}</Col>
 
-                <Col className="col-md-4">
+                <Col className="col-12 col-md-5  mb-2 mb-md-0">
                   {RadioButtonGroup([t('circle'), t('rounded_rectangle'), t('rectangle')], viewSettings.avatar.shape.valueOf(), (index) => {
                     updateAvatarSettings({
                       ...viewSettings.avatar,
@@ -123,8 +123,8 @@ export function ViewSettingsPane() {
                   })}
                 </Col>
 
-                <Col className="offset-md-1 col-md-2 text-end">{t('vertical_offset')}</Col>
-                <Col className="col-md-2">
+                <Col className="col-md-3 text-md-end my-auto">{t('vertical_offset')}</Col>
+                <Col className="col-6 col-md-2">
                   <Form.Control
                     type="number"
                     value={viewSettings.avatar.offsetY}
@@ -139,8 +139,8 @@ export function ViewSettingsPane() {
               </Row>
 
               <Row>
-                <Col className="col-md-2">{t('speaking_behavior')}</Col>
-                <Col className="col-md-9">
+                <Col className="col-12 col-md-2 my-auto">{t('speaking_behavior')}</Col>
+                <Col className="col-12 col-md-9">
                   {AnimationSettingButtonGroup("avatar-speaking", viewSettings.avatar.speaking, true, (setting: AnimationSettings) =>
                     updateAvatarSettings({ ...viewSettings.avatar, speaking: setting })
                   )}
@@ -153,8 +153,8 @@ export function ViewSettingsPane() {
             <Accordion.Header>{t('username')}</Accordion.Header>
             <Accordion.Body>
               <Row className="mb-2">
-                <Col className="col-md-2">{tt('show')}</Col>
-                <Col className="col-md-4">
+                <Col className="col-6 col-md-2">{tt('show')}</Col>
+                <Col className="col-6 col-md-3 mb-2 mb-md-0">
                   <Form.Check className="form-switch">
                     <Form.Check.Input
                       type="checkbox"
@@ -164,11 +164,25 @@ export function ViewSettingsPane() {
                     />
                   </Form.Check>
                 </Col>
+
+                <Col className="col-6 col-md-5 text-md-end my-auto">{t('vertical_offset')}</Col>
+                <Col className="col-6 col-md-2">
+                  <Form.Control
+                    type="number"
+                    value={viewSettings.username.offsetY}
+                    min="-300"
+                    max="300"
+                    style={{ width: "80px" }}
+                    onChange={(e) => {
+                      updateUsernameSettings({ ...viewSettings.username, offsetY: parseInt(e.target.value) });
+                    }}
+                  />
+                </Col>
               </Row>
 
               <Row>
-                <Col className="col-md-2">{t('font')}</Col>
-                <Col className="col-md-5">
+                <Col className="col-6 col-md-2 my-auto">{t('font')}</Col>
+                <Col className="col-12 col-md-10 col-lg-6">
                   <InputGroup>
                     <InputGroup.Text>{t('size')}</InputGroup.Text>
                     <Form.Control
@@ -190,20 +204,6 @@ export function ViewSettingsPane() {
                       updateUsernameSettings({ ...viewSettings.username, backgroundColor: color })
                     )}
                   </InputGroup>
-                </Col>
-
-                <Col className="col-md-2 text-end">{t('vertical_offset')}</Col>
-                <Col className="col-md-2">
-                  <Form.Control
-                    type="number"
-                    value={viewSettings.username.offsetY}
-                    min="-300"
-                    max="300"
-                    style={{ width: "80px" }}
-                    onChange={(e) => {
-                      updateUsernameSettings({ ...viewSettings.username, offsetY: parseInt(e.target.value) });
-                    }}
-                  />
                 </Col>
               </Row>
             </Accordion.Body>
