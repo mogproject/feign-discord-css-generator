@@ -1,6 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowDown, faArrowUp, faPen, faPenToSquare, faTractor, faTrash, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faArrowDown, faArrowUp, faPen, faPenToSquare, faTrash, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Container, Row, Col, InputGroup, Form, Button, Modal } from "react-bootstrap";
 import { DiscordUser, ConfContext } from "../../models/Context";
 import { useTranslation } from "react-i18next";

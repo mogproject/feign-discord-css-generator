@@ -20,7 +20,7 @@ function Header() {
         <Container>
           <Navbar.Brand href='#'>Feign-Discord CSS Generator</Navbar.Brand>
 
-          <Nav className="me-auto d-none d-xl-flex">
+          <Nav className="me-auto d-none d-lg-flex">
             <Nav.Link href="#features">{t('features.features')}</Nav.Link>
             <Nav.Link href="#settings">{t('settings.settings')}</Nav.Link>
             <Nav.Link href="#preview">{t('preview.preview')}</Nav.Link>
