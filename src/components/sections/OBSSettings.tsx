@@ -2,7 +2,7 @@ import React from "react";
 import { Container, Row, Col, InputGroup, Form, Alert, Button } from "react-bootstrap";
 import { ConfContext } from "../../models/Context";
 import { buildCSS } from "../../models/CSSBuilder";
-import { buildFeignImageCSS } from "../../models/FeignImageCSS";
+import { buildFeignImageCss } from "../../models/FeignImageCss";
 import { CopyButton } from "../buttons/CopyButton";
 import FileSaver from "../../io/FileSaver";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -17,7 +17,7 @@ export function OBSSettings() {
   const { feignPlayers, serverID, channelID, viewSettings } = React.useContext(ConfContext);
   const isValid = feignPlayers.some((user) => user !== '');
 
-  const content = buildCSS(feignPlayers, viewSettings) + "\n" + buildFeignImageCSS();
+  const content = buildCSS(feignPlayers, viewSettings) + "\n" + buildFeignImageCss();
 
   const obsURL = `https://streamkit.discord.com/overlay/voice/${serverID}/${channelID}`;
   const obsWidth = 1772 + viewSettings.fei.interval * 12;  // should support up to 13 users

@@ -7,7 +7,7 @@ import { DiscordUsers } from "./components/sections/DiscordUsers";
 import { FeignPlayers } from "./components/sections/FeignPlayers";
 import { Preview } from "./components/sections/Preview";
 import { buildCSS } from "./models/CSSBuilder";
-import { buildFeignImageCSS } from "./models/FeignImageCSS";
+import { buildFeignImageCss } from "./models/FeignImageCss";
 import { OBSSettings } from "./components/sections/OBSSettings";
 import { DiscordVoiceChannel } from "./components/sections/DiscordVoiceChannel";
 import { ViewSettingsPane } from "./components/sections/ViewSettingsPane";
@@ -164,7 +164,7 @@ export default function App() {
         </Container>
       </ConfContext.Provider>
       <style>{buildCSS(feignPlayers, viewSettings)}</style>
-      <style>{buildFeignImageCSS()}</style>
+      <style>{buildFeignImageCss()}</style>
       <hr />
       <Footer />
     </>

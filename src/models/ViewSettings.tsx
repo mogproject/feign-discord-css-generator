@@ -87,13 +87,7 @@ export class ViewSettings {
 
   // Margins (relative to their parent nodes).
   getFeiMarginTop(): number {
-    if (this.username.show) {
-      return this.getFeiTopRelative() - this.getUsernameBottomRelative();
-    } else if (this.avatar.show) {
-      return this.getFeiTopRelative() - this.getAvatarBottomRelative();
-    } else {
-      return this.getAvatarMarginTop() - this.getAvatarTopRelative();
-    }
+    return this.getFeiTopRelative() - this.getTopElementRelative() + ViewSettings.DEFAULT_TOP_MARGIN;
   }
   getAvatarMarginTop(): number { return ViewSettings.DEFAULT_TOP_MARGIN + this.getAvatarTopRelative() - this.getTopElementRelative(); }
   getUsernameMarginTop(): number {
