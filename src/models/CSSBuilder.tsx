@@ -7,20 +7,16 @@ function hex2rgba(hex: string, alpha: number): string {
   return `rgba(${colors},${alpha})`;
 }
 
-function animationString(settings: AnimationSettings, prefix: string): string {
+function animationString(flash: boolean, jump: boolean, flash_suffix: string, prefix: string): string {
   const ret = [
-    [`${prefix}flash`, settings.flash],
-    ["jump", settings.jump],
-  ].reduce((acc, [t, enabled]) => {
-    if (!enabled) return acc;
-    const delimiter = acc === "" ? "" : ",";
-    return acc + delimiter + `750ms infinite alternate ease-in-out speak-${t}`;
-  }, "");
+    flash ? [`${prefix}speak-flash${flash_suffix}`] : [],
+    jump ? [`${prefix}speak-jump`] : [],
+  ].flat().join(',');
   return ret === "" ? "none" : ret;
 }
 
-const glowFilter = (x: number, c: string) => {
-  const prefix = `drop-shadow(0 0 ${x}px ${c}) brightness(100%) `;
+const glowFilter = (prefix: string, x: number, c: string) => {
+  const infix = ` drop-shadow(0 0 ${x}px ${c}) `;
   const suffix = [
     [2, 2],
     [-2, -2],
@@ -29,7 +25,7 @@ const glowFilter = (x: number, c: string) => {
   ]
     .map(([i, j]) => `drop-shadow(${i}px ${j}px 0px ${c})`)
     .join(" ");
-  return prefix + suffix;
+  return prefix + infix + suffix;
 };
 
 export function buildCSS(feignPlayers: string[], settings: ViewSettings): string {
@@ -39,73 +35,118 @@ export function buildCSS(feignPlayers: string[], settings: ViewSettings): string
   const now = new Date().toISOString();
   const prefix = `/* CSS built on https://feign.mogproject.com (v${APP_VERSION}). ${now}. */\n\n`;
 
-  const fei = feignPlayers.flatMap((id: string, i: number) =>
-    id === ""
-      ? []
-      : [
-        // Character
-        `.voice_state[data-userid="${id}"]::after {`,
-        `  background-image: var(--feign-icon-${FEI_COLORS[i]});`,
-        `  background-size: ${settings.getFeiWidth()}px ${settings.getFeiHeight()}px;`,
-        "  display: inline-block;",
-        '  content: "";',
-        `  width: ${settings.getFeiWidth()}px;`,
-        `  height: ${settings.getFeiHeight()}px;`,
-        "  border-radius: 0;",
-        "  filter: brightness(65%);",
-        "  text-align: center;",
-        `  margin-top: ${settings.getFeiMarginTop()}px;`,
-        "  position: relative;",
-        "  top: 0px;",
-        settings.fei.mirror ? "  -webkit-transform: scaleX(-1);" : "",
-        settings.fei.mirror ? "  transform: scaleX(-1);" : "",
-        "  z-index: 1",
-        "}",
+  const feiBack = [
+    // Character
+    `.voice_state::before {`,
+    `  background-image: var(--feign-icon-bg);`,
+    `  background-size: ${settings.getFeiWidth()}px ${settings.getFeiHeight()}px;`,
+    "  display: inline-block;",
+    '  content: "";',
+    `  width: ${settings.getFeiWidth()}px;`,
+    `  height: ${settings.getFeiHeight()}px;`,
+    `  filter: var(--d-default);`,
+    "  text-align: center;",
+    `  margin-top: ${settings.getFeiMarginTop()}px;`,
+    "  position: absolute;",
+    "  top: 0px;",
+    settings.fei.mirror ? "  -webkit-transform: scaleX(-1);" : "",
+    settings.fei.mirror ? "  transform: scaleX(-1);" : "",
+    "  z-index: 1",
+    "}",
 
-        // Animation
-        `.wrapper_speaking[data-userid="${id}"]::after {`,
-        `  animation: ${animationString(settings.fei.speaking, "")};`,
-        "  animation-fill-mode: forwards;",
-        "  filter: brightness(100%);",
-        "}",
-      ]
-  );
+    // Animation
+    `.wrapper_speaking::before {`,
+    `  animation-name: ${animationString(settings.fei.speaking.flash, settings.fei.speaking.jump, "-default", '')};`,
+    "  animation-duration: 750ms;",
+    "  animation-timing-function: ease-in-out;",
+    "  animation-delay: 0s;",
+    "  animation-iteration-count: infinite;",
+    "  animation-direction: alternate;",
+    "  animation-fill-mode: forwards;",
+    `  filter: var(--f-default);`,
+    "}",
+  ];
 
-  const animJumpFei = (settings.fei.speaking.jump || settings.avatar.speaking.jump)
+  const feiFront = [
+    `.voice_state::after {`,
+    `  background-image: var(--feign-icon-fg);`,
+    `  background-size: ${settings.getFeiWidth()}px ${settings.getFeiHeight()}px;`,
+    "  display: inline-block;",
+    '  content: "";',
+    `  width: ${settings.getFeiWidth()}px;`,
+    `  height: ${settings.getFeiHeight()}px;`,
+    "  filter: brightness(65%);",
+    "  text-align: center;",
+    `  margin-top: ${settings.getFeiMarginTop()}px;`,
+    "  position: absolute;",
+    "  top: 0px;",
+    settings.fei.mirror ? "  -webkit-transform: scaleX(-1);" : "",
+    settings.fei.mirror ? "  transform: scaleX(-1);" : "",
+    "  z-index: 1",
+    "}",
+
+    // Animation
+    `.wrapper_speaking::after {`,
+    `  animation-name: ${animationString(false, settings.fei.speaking.jump, "", '')};`,
+    "  animation-duration: 750ms;",
+    "  animation-timing-function: ease-in-out;",
+    "  animation-delay: 0s;",
+    "  animation-iteration-count: infinite;",
+    "  animation-direction: alternate;",
+    "  animation-fill-mode: forwards;",
+    "  filter: brightness(100%);",
+    "}",
+  ];
+
+  function createFlashKeyFrames(anim: AnimationSettings, suffix: string) {
+    if (!anim.flash) return [];
+    const prefix = suffix === 'avatar' ? 'brightness(100%)' : `var(--f-${suffix})`;
+    return [
+      `@keyframes speak-flash-${suffix} {`,
+      `  0% {filter:${glowFilter(prefix, 2, anim.flashColor)};}`,
+      `  50% {filter:${glowFilter(prefix, glowAmount, anim.flashColor)};}`,
+      `  100% {filter:${glowFilter(prefix, 2, anim.flashColor)};}`,
+      "}",
+    ];
+  }
+
+  function feiSpecific(id: string, colorIndex: number) {
+    if (id === '') return [];
+    const color = FEI_COLORS[colorIndex];
+    const character = [`.voice_state[data-userid="${id}"]::before {filter:var(--d-${color});}`];
+    const animation = [
+      `.wrapper_speaking[data-userid="${id}"]::before {`,
+      `  animation-name: ${animationString(settings.fei.speaking.flash, settings.fei.speaking.jump, `-${color}`, '')};`,
+      `  filter: var(--f-${color});`,
+      '}',
+    ];
+    const keyframes = createFlashKeyFrames(settings.fei.speaking, color);
+    return [...character, ...animation, ...keyframes];
+  }
+
+  const fei = feignPlayers.flatMap((id: string, i: number) => feiSpecific(id, i));
+
+  // jump animation
+  const animJump = (settings.fei.speaking.jump || settings.avatar.speaking.jump)
     ? ["@keyframes speak-jump { 0% {top: 0px;} 50% {top: -20px;} 100% {top: 0px;} }"] : [];
 
-  const animFlashFei = settings.fei.speaking.flash
-    ? [
-      "@keyframes speak-flash {",
-      `  0% {filter:${glowFilter(2, settings.fei.speaking.flashColor)};}`,
-      `  50% {filter:${glowFilter(glowAmount, settings.fei.speaking.flashColor)};}`,
-      `  100% {filter:${glowFilter(2, settings.fei.speaking.flashColor)};}`,
-      "}",
-    ]
-    : [];
+  const animFlashFei = createFlashKeyFrames(settings.fei.speaking, 'default');
 
-  const animFlashAvatar = settings.avatar.speaking.flash
-    ? [
-      "@keyframes speak-avatar-flash {",
-      `  0% {filter:${glowFilter(2, settings.avatar.speaking.flashColor)};}`,
-      `  50% {filter:${glowFilter(glowAmount, settings.avatar.speaking.flashColor)};}`,
-      `  100% {filter:${glowFilter(2, settings.avatar.speaking.flashColor)};}`,
-      "}",
-    ]
-    : [];
+  // avatar flash
+  const animFlashAvatar = createFlashKeyFrames(settings.avatar.speaking, 'avatar');
 
-  const animation = [...animJumpFei, ...animFlashFei, ...animFlashAvatar];
+  const animation = [...animJump, ...animFlashFei, ...animFlashAvatar];
 
   const avatarRadius =
     { [AvatarShape.Circle]: 50, [AvatarShape.RoundedRectangle]: 12, [AvatarShape.Rectangle]: 0 }[settings.avatar.shape] ?? 0;
 
   const usernameOpacity = 0.95;
 
-  const avatarAnimation = [`  animation: ${animationString(settings.avatar.speaking, "avatar-")};`, "  animation-fill-mode: forwards;"];
+  const avatarAnimation = [`  animation: ${animationString(settings.avatar.speaking.flash, settings.avatar.speaking.jump, "-avatar", '750ms infinite alternate ease-in-out ')};`];
 
   const data = [
     ".voice_states {display: flex; flex-wrap: nowrap; margin: 0px 15px 0px 15px; padding: 0;}",
-    `.voice_state {height: auto; margin: 0 ${settings.fei.interval}px 0 0; display: flex; flex-direction: column;}`,
+    `.voice_state {height: auto; margin: 0 ${settings.fei.interval}px 0 0; display: flex; flex-direction: column; flex: 0 0 ${settings.getFeiWidth()}px; position: relative;}`,
 
     // Avatar image
     ".voice_avatar {",
@@ -126,6 +167,7 @@ export function buildCSS(feignPlayers: string[], settings: ViewSettings): string
     `  border-color: ${settings.avatar.speaking.outline ? settings.avatar.speaking.outlineColor : "transparent"} !important;`,
     "  filter: brightness(100%);",
     ...avatarAnimation,
+    "  animation-fill-mode: forwards;",
     "}",
 
     // User name
@@ -155,7 +197,7 @@ export function buildCSS(feignPlayers: string[], settings: ViewSettings): string
   ];
   return (
     prefix +
-    [...fei, ...animation, ...data]
+    [...feiBack, ...feiFront, ...fei, ...animation, ...data]
       .map((s) => s.trim())
       .filter((s) => s)
       .join("\n")
