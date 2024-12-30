@@ -101,11 +101,12 @@ export function buildCSS(feignPlayers: string[], settings: ViewSettings): string
   function createFlashKeyFrames(anim: AnimationSettings, suffix: string) {
     if (!anim.flash) return [];
     const prefix = suffix === 'avatar' ? 'brightness(100%)' : `var(--f-${suffix})`;
+    const varSuffix = suffix === 'avatar' ? '-a' : '';
     return [
-      `@keyframes speak-flash-${suffix} {`,
-      `  0% {filter:${glowFilter(prefix, 2, anim.flashColor)};}`,
-      `  50% {filter:${glowFilter(prefix, glowAmount, anim.flashColor)};}`,
-      `  100% {filter:${glowFilter(prefix, 2, anim.flashColor)};}`,
+      `@keyframes speak-flash-${suffix} {` +
+      `0% {filter:${prefix} var(--shadow-sm${varSuffix});}` +
+      `50% {filter:${prefix} var(--shadow-lg${varSuffix});}` +
+      `100% {filter:${prefix} var(--shadow-sm${varSuffix});}` +
       "}",
     ];
   }
@@ -115,9 +116,9 @@ export function buildCSS(feignPlayers: string[], settings: ViewSettings): string
     const color = FEI_COLORS[colorIndex];
     const character = [`.voice_state[data-userid="${id}"]::before {filter:var(--d-${color});}`];
     const animation = [
-      `.wrapper_speaking[data-userid="${id}"]::before {`,
-      `  animation-name: ${animationString(settings.fei.speaking.flash, settings.fei.speaking.jump, `-${color}`, '')};`,
-      `  filter: var(--f-${color});`,
+      `.wrapper_speaking[data-userid="${id}"]::before {` +
+      `animation-name: ${animationString(settings.fei.speaking.flash, settings.fei.speaking.jump, `-${color}`, '')};` +
+      `filter: var(--f-${color});` +
       '}',
     ];
     const keyframes = createFlashKeyFrames(settings.fei.speaking, color);
@@ -125,6 +126,19 @@ export function buildCSS(feignPlayers: string[], settings: ViewSettings): string
   }
 
   const fei = feignPlayers.flatMap((id: string, i: number) => feiSpecific(id, i));
+
+  // shadow settings
+  const shadowDefs = [
+    settings.fei.speaking.flash ? [
+      `  --shadow-sm:${glowFilter('', 2, settings.fei.speaking.flashColor)};`,
+      `  --shadow-lg:${glowFilter('', glowAmount, settings.fei.speaking.flashColor)};`,
+    ] : [],
+    settings.avatar.speaking.flash ? [
+      `  --shadow-sm-a:${glowFilter('', 2, settings.avatar.speaking.flashColor)};`,
+      `  --shadow-lg-a:${glowFilter('', glowAmount, settings.avatar.speaking.flashColor)};`,
+    ] : [],
+  ].flat();
+  const shadowDefsSection = shadowDefs ? [':root {', ...shadowDefs, '}'] : [];
 
   // jump animation
   const animJump = (settings.fei.speaking.jump || settings.avatar.speaking.jump)
@@ -135,7 +149,7 @@ export function buildCSS(feignPlayers: string[], settings: ViewSettings): string
   // avatar flash
   const animFlashAvatar = createFlashKeyFrames(settings.avatar.speaking, 'avatar');
 
-  const animation = [...animJump, ...animFlashFei, ...animFlashAvatar];
+  const animation = [...animJump, ...animFlashFei, ...animFlashAvatar, ...shadowDefsSection];
 
   const avatarRadius =
     { [AvatarShape.Circle]: 50, [AvatarShape.RoundedRectangle]: 12, [AvatarShape.Rectangle]: 0 }[settings.avatar.shape] ?? 0;
