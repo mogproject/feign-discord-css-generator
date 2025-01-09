@@ -18,7 +18,7 @@ function Header() {
     <header>
       <Navbar fixed="top" bg="light" data-bs-theme="light" className="border-bottom">
         <Container>
-          <Navbar.Brand href='#'>Feign-Discord CSS Generator</Navbar.Brand>
+          <Navbar.Brand href='#'>Feign CSS Generator ({t('app_title')})</Navbar.Brand>
 
           <Nav className="me-auto d-none d-lg-flex">
             <Nav.Link href="#features">{t('features.features')}</Nav.Link>

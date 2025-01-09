@@ -12,6 +12,8 @@ const ja = {
   show: '表示',
   color: '色',
 
+  app_title: 'もぐぷろふぇいん',
+
   // Colors.
   colors: {
     white: '白',
