@@ -1,6 +1,9 @@
 build:
 	npm run build
 
+install:
+	npm install --force
+
 watch:
 	npm start
 
@@ -12,5 +15,5 @@ publish: build
 	mv -f build docs
 	/bin/echo -n 'feign.mogproject.com' > docs/CNAME
 
-.PHONY: build watch open publish
+.PHONY: build install watch open publish
 

@@ -12,6 +12,8 @@ const en = {
   show: 'Show',
   color: 'Color',
 
+  app_title: 'mog-feign',
+
   // Colors.
   colors: {
     white: 'White',
