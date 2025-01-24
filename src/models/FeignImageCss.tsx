@@ -3,34 +3,34 @@ export function buildFeignImageCss(): string {
   const data = [
     ":root {",
     // Color conversions
-    '  --f-white: invert(100%);',  // white
-    '  --f-salmon: invert(78%) sepia(54%) saturate(5359%) hue-rotate(344deg) brightness(101%) contrast(101%);', // salmon
-    '  --f-purple: invert(25%) sepia(37%) saturate(2322%) hue-rotate(253deg) brightness(88%) contrast(91%);',  // purple
-    '  --f-green: invert(38%) sepia(76%) saturate(4631%) hue-rotate(76deg) brightness(86%) contrast(91%);', // green
-    '  --f-blue: invert(46%) sepia(92%) saturate(1907%) hue-rotate(203deg) brightness(89%) contrast(88%);',  // blue
-    '  --f-red: invert(8%) sepia(93%) saturate(5456%) hue-rotate(352deg) brightness(98%) contrast(106%);',  // red
-    '  --f-yellow: invert(98%) sepia(91%) saturate(3846%) hue-rotate(318deg) brightness(113%) contrast(102%);',  // yellow
-    '  --f-lime: invert(79%) sepia(54%) saturate(557%) hue-rotate(45deg) brightness(100%) contrast(106%);', // lime
-    '  --f-sky: invert(80%) sepia(82%) saturate(431%) hue-rotate(102deg) brightness(86%) contrast(88%);', // sky
-    '  --f-pink: invert(60%) sepia(21%) saturate(996%) hue-rotate(295deg) brightness(112%) contrast(101%);', // pink
-    '  --f-brown: invert(25%) sepia(24%) saturate(1226%) hue-rotate(348deg) brightness(97%) contrast(89%);', // brown
-    '  --f-rose: invert(19%) sepia(65%) saturate(4987%) hue-rotate(300deg) brightness(106%) contrast(125%);', // rose
-    '  --f-orange: invert(30%) sepia(99%) saturate(2314%) hue-rotate(357deg) brightness(100%) contrast(101%);', // orange
-    '  --f-default: invert(100%) brightness(75%);', // unknown
-    '  --d-white: invert(72%) sepia(0%) saturate(4%) hue-rotate(135deg) brightness(99%) contrast(87%);', // white dark #afafaf
-    '  --d-salmon: invert(27%) sepia(99%) saturate(1544%) hue-rotate(20deg) brightness(101%) contrast(86%);', // salmon dark #af5c12
-    '  --d-purple: invert(16%) sepia(40%) saturate(2136%) hue-rotate(252deg) brightness(90%) contrast(96%);', // purple dark #4b215f
-    '  --d-green: invert(22%) sepia(21%) saturate(3064%) hue-rotate(68deg) brightness(101%) contrast(95%);', // green dark  #1a5206
-    '  --d-blue: invert(21%) sepia(85%) saturate(1087%) hue-rotate(204deg) brightness(96%) contrast(85%);', // blue dark #334b93
-    '  --d-red: invert(9%) sepia(86%) saturate(6697%) hue-rotate(352deg) brightness(56%) contrast(106%);', // red dark #7b0006
-    '  --d-yellow: invert(67%) sepia(25%) saturate(1031%) hue-rotate(14deg) brightness(88%) contrast(84%);', // yellow dark #af9d36
-    '  --d-lime: invert(50%) sepia(94%) saturate(368%) hue-rotate(56deg) brightness(97%) contrast(88%);', // lime dark #59af2e
-    '  --d-sky: invert(41%) sepia(72%) saturate(392%) hue-rotate(126deg) brightness(96%) contrast(101%);', // sky dark #1d8e84
-    '  --d-pink: invert(43%) sepia(16%) saturate(1242%) hue-rotate(289deg) brightness(100%) contrast(85%);', // pink dark #af627b
-    '  --d-brown: invert(17%) sepia(30%) saturate(1009%) hue-rotate(349deg) brightness(94%) contrast(95%);', // brown dark #442b12
-    '  --d-rose: invert(14%) sepia(95%) saturate(5904%) hue-rotate(300deg) brightness(78%) contrast(105%);', // rose dark #af019a
-    '  --d-orange: invert(17%) sepia(96%) saturate(2901%) hue-rotate(13deg) brightness(92%) contrast(98%);', // orange dark #af2b02
-    '  --d-default: invert(100%) brightness(40%);', // unkonwn dark
+    '  --f-white: invert(1);',  // white
+    '  --f-salmon: invert(.65)sepia(.5)hue-rotate(5.8rad)saturate(10.1);', // salmon #ff891e
+    '  --f-purple: invert(.505)sepia(.5)hue-rotate(3.8rad)saturate(15.1)brightness(.553);',  // purple #71348d
+    '  --f-green: invert(.622)sepia(.5)hue-rotate(3.8rad)saturate(9.48)brightness(.953)invert(1);', // green #2a7b0c
+    '  --f-blue: invert(.854)sepia(.5)hue-rotate(5.8rad)saturate(10.26)brightness(.69)invert(1);',  // blue #4f71d7
+    '  --f-red: invert(.9048)sepia(.5)hue-rotate(1.5rad)saturate(7.1711)invert(1);',  // red #b4000b
+    '  --f-yellow: invert(.8756)sepia(.5)hue-rotate(5.8rad)saturate(8.45);',  // yellow #ffe551
+    '  --f-lime: invert(.811)sepia(.5)hue-rotate(1rad)saturate(5.8);', // lime #85ff46
+    '  --f-sky: invert(.9019)sepia(.5)hue-rotate(1.5rad)saturate(7.7)brightness(.816);', // sky #30d0c0
+    '  --f-pink: invert(.62)sepia(.5)hue-rotate(5.1rad)saturate(4);', // pink #ff91b6
+    '  --f-brown: invert(.73)sepia(.5)hue-rotate(5.8rad)saturate(7)brightness(.396);', // brown #654322
+    '  --f-rose: invert(.55)sepia(.5)hue-rotate(5.1rad)saturate(48);', // rose #ff00e0
+    '  --f-orange: invert(.59)sepia(.5)hue-rotate(3.2rad)saturate(47)brightness(.98)invert(1);', // orange ff4405
+    '  --f-default: invert(.4);', // unknown
+    '  --d-white: invert(0.686);', // white dark #afafaf
+    '  --d-salmon: invert(.64)sepia(.5)hue-rotate(5.8rad)saturate(10.35)brightness(.686);', // salmon dark #af5c12
+    '  --d-purple: invert(.49)sepia(.5)hue-rotate(3.8rad)saturate(16)brightness(.373);', // purple dark #4b215f
+    '  --d-green: invert(.7175)sepia(.5)hue-rotate(3.8rad)saturate(5.6)brightness(.976)invert(1);', // green dark  #1a5206
+    '  --d-blue: invert(.862)sepia(.5)hue-rotate(5.8rad)saturate(5.805)brightness(.8)invert(1);', // blue dark #334b93
+    '  --d-red: invert(.9069)sepia(.5)hue-rotate(1.5rad)saturate(4.8818)invert(1);', // red dark #7b0006
+    '  --d-yellow: invert(.8756)sepia(.5)hue-rotate(5.8rad)saturate(8.5587)brightness(.686);', // yellow dark #af9d36
+    '  --d-lime: invert(.811)sepia(.5)hue-rotate(1rad)saturate(5.94)brightness(.686);', // lime dark #59af2e
+    '  --d-sky: invert(.9028)sepia(.5)hue-rotate(1.5rad)saturate(8)brightness(.557);', // sky dark #1d8e84
+    '  --d-pink: invert(.8853)sepia(.5)hue-rotate(1.5rad)saturate(4.29)brightness(.616)invert(1);', // pink dark #af627b
+    '  --d-brown: invert(.71)sepia(.5)hue-rotate(5.8rad)saturate(8)brightness(.267);', // brown dark #442b12
+    '  --d-rose: invert(.55)sepia(.5)hue-rotate(5.1rad)saturate(48.5)brightness(.686);', // rose dark #af019a
+    '  --d-orange: invert(.73)sepia(.5)hue-rotate(3.2rad)saturate(11.28)brightness(.992)invert(1);', // orange dark #af2b02
+    '  --d-default: invert(.2);', // unkonwn dark
 
     // Feign icon images
     "  --feign-icon-bg: url(data:image/webp;base64,iVBORw0KGgoAAAANSUhEUgAAAIYAAADICAYAAAAtK5mNAAAACXBIWXMAAAsTAAALEwEAmpwYAAAC2klEQVR42u3d0W6jMBBA0Rjl/3/Zfa9Qa7DBY8+57wVCTsZmlVU+H0lqrWz0Wqr7mPMFVffXha8KYRsoBQRAol5gJhDLICkwABLhYoBYBEgBAo5ZFwDFgjgKEIC8eVIoFsdRgIDj6ZNBsRGOAgUcT50Eig1xFCjgGH1wKDbGUaCAY9RBoUiA44BCI2AoZnUmDNPCxFD2qVFmnFTxN6IHFLKUWFKGwTAtTAyZGmCoA4ZlBAxZTtpgmBYmhgSG5aQDhmVEJobAEBjq3Roc9hcyMQSGwBAYmgHDxlMmhsDQjdUADIEhMASGwBAYAkOBYfhXT5kYAkNgCAyBITAEhsAQGAJDYAgMCQyBITAEhsAQGAJDYGhu5S6M4t7JxBAYAkNgCAxNh+HJRCaGwNCNzpYP//N9//fYxNC4pcQmVCaGZeTeH9pvJETR+sdwJENx5QBwJEJhjwEFGAIjc8OWfJtPy4qJoXGqTIukU8PEsOcAA44xo8YyknhZMTFMDjDUP14sI8mXFBPDkgKG7DHUOTUO+wuZGGoeAGAIDLVPjcP+QiaGwFDfcgKGTAy1Tw0w9O/E8EQiE0N/LydgyMQQGOpcTsCQiSEwBIae2GeAIRNDYAgMgSEwBIbAEBgCQ2AIDIEhgaGrMPxInkwMgSEwNCo/4a1TEyaGLCXqg+GxVSaGzocCGGp+KvF0woKJoesTw9RI7MAvNevUwNd9AeLOUmJq5Ns+XIIBx8YIzjreOIlyiDI5Np4UvQeAY2MUvQeBY1MUIw4Ex2YgRh4Qjo1AjD4wHJuAeOoEgCwO4ukTAbIoiDdPCMkiGGafHJSgGCJcCBzBIPzON7igAEPtfX1KLW/ZJ4avDQSH4ZMJhsAQGAJDYEhgCAyBITAEhsAQGAJDYAgMgSEwNs23t8DQqjB8esGw3Kz64Ti8CYp402rQ11ezQ41ykTXoa6vZQES82MhvQs2AYYULr5neBGmZfgBTrFlOeRQQNQAAAABJRU5ErkJggg==);",
