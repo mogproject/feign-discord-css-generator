@@ -12,13 +12,14 @@ export function ViewSettingsPane() {
   const t = translate as ((s: string, o?: Record<string, string | boolean>) => string);
   const tt = (k: string) => { return t(k, { keyPrefix: '' }) };
 
-  const { viewSettings, updateFeiSettings, updateAvatarSettings, updateUsernameSettings } = React.useContext(ConfContext);
+  const { viewSettings, updateFeiSettings, updateAvatarSettings, updateUsernameSettings, updateStreamerSettings } = React.useContext(ConfContext);
   const [modalOpen, setModalOpen] = React.useState(false);
   const handleModalClose = () => setModalOpen(false);
   const handleInitialize = () => {
     updateFeiSettings(defaultConf.viewSettings.fei);
     updateAvatarSettings(defaultConf.viewSettings.avatar);
     updateUsernameSettings(defaultConf.viewSettings.username);
+    updateStreamerSettings(defaultConf.viewSettings.streamer);
     setModalOpen(false);
   };
 
@@ -45,6 +46,21 @@ export function ViewSettingsPane() {
       {/*
       --------------------------------------------------------------------------
        */}
+      <Container>
+        <Row className="mb-3">
+          <Col className="col-6 col-md-4 col-lg-3 col-xl-2 mb-2 mb-md-0">{t('show_my_avatar_first')}</Col>
+          <Col className="col-6 col-md-3">
+            <Form.Check className="form-switch">
+              <Form.Check.Input
+                type="checkbox"
+                role="switch"
+                checked={viewSettings.streamer.showStreamerFirst}
+                onChange={() => updateStreamerSettings({ ...viewSettings.streamer, showStreamerFirst: !viewSettings.streamer.showStreamerFirst })}
+              />
+            </Form.Check>
+          </Col>
+        </Row>
+      </Container>
       <div className="view-settings">
         <Accordion defaultActiveKey={["0", "1", "2"]} alwaysOpen>
           <Accordion.Item eventKey="0">

@@ -30,3 +30,7 @@ code {
 .player-unused {
   background-color: #e2e3e5;
 }
+
+.form-check-input:hover {
+  cursor: pointer;
+}

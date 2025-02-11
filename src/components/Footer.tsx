@@ -56,7 +56,7 @@ function Footer() {
                 setModalOpen(true);
               }}>Special Thanks</span>
               &nbsp;-
-              Feign-Discord CSS Generator &copy; 2024 &nbsp;
+              Feign-Discord CSS Generator &copy; 2024-2025 &nbsp;
               <a href="https://mogproject.com" target="_blank" rel="noreferrer" className="link-like">mogproject</a>
             </small>
           </p>

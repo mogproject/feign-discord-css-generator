@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "./components/Header";
 import { Container, Accordion } from "react-bootstrap";
-import { FeiSettings, AvatarSettings, UsernameSettings, ViewSettings } from './models/ViewSettings';
+import { FeiSettings, AvatarSettings, UsernameSettings, ViewSettings, StreamerSettings } from './models/ViewSettings';
 import { DiscordUser, ConfContext, defaultConf, retrieveChannelIDs, players2array } from "./models/Context";
 import { DiscordUsers } from "./components/sections/DiscordUsers";
 import { FeignPlayers } from "./components/sections/FeignPlayers";
@@ -66,10 +66,12 @@ export default function App() {
   const initialFeiSettings = { ...defaultConf.viewSettings.fei, ...JSON.parse(localStorage.getItem("view_fei") || "{}") };
   const initialAvatarSettings = { ...defaultConf.viewSettings.avatar, ...JSON.parse(localStorage.getItem("view_avatar") || "{}") };
   const initialUsernameSettings = { ...defaultConf.viewSettings.username, ...JSON.parse(localStorage.getItem("view_username") || "{}") };
+  const initialStreamerSettings = { ...defaultConf.viewSettings.streamer, ...JSON.parse(localStorage.getItem("view_streamer") || "{}") };
 
   const [feiSettings, setFeiSettings] = React.useState(initialFeiSettings);
   const [avatarSettings, setAvatarSettings] = React.useState(initialAvatarSettings);
   const [usernameSettings, setUsernameSettings] = React.useState(initialUsernameSettings);
+  const [streamerSettings, setStreamerSettings] = React.useState(initialStreamerSettings);
 
   function updateFeiSettings(newSettings: FeiSettings) {
     setFeiSettings(newSettings);
@@ -86,10 +88,15 @@ export default function App() {
     localStorage.setItem("view_username", JSON.stringify(newSettings));
   }
 
+  function updateStreamerSettings(newSettings: StreamerSettings) {
+    setStreamerSettings(newSettings);
+    localStorage.setItem("view_streamer", JSON.stringify(newSettings));
+  }
+
   // Preview
   const [isSpeaking, setIsSpeaking] = React.useState(players2array(feignPlayers));
 
-  const viewSettings = new ViewSettings(feiSettings, avatarSettings, usernameSettings);
+  const viewSettings = new ViewSettings(feiSettings, avatarSettings, usernameSettings, streamerSettings);
 
   return (
     <>
@@ -111,6 +118,7 @@ export default function App() {
           updateFeiSettings: updateFeiSettings,
           updateAvatarSettings: updateAvatarSettings,
           updateUsernameSettings: updateUsernameSettings,
+          updateStreamerSettings: updateStreamerSettings,
           isSpeaking: isSpeaking,
           updateIsSpeaking: setIsSpeaking,
         }}

@@ -35,10 +35,15 @@ export interface UsernameSettings {
   offsetY: number;
 }
 
+export interface StreamerSettings {
+  showStreamerFirst: boolean;
+}
+
 export class ViewSettings {
   fei: FeiSettings;
   avatar: AvatarSettings;
   username: UsernameSettings;
+  streamer: StreamerSettings;
 
   static readonly DEFAULT_TOP_MARGIN = 40;
   static readonly DEFAULT_BOTTOM_MARGIN = 28;
@@ -51,10 +56,11 @@ export class ViewSettings {
   static readonly USERNAME_WIDTH = 126; // FEI_WIDTH - 8
   static readonly USERNAME_HEIGHT = 36;
 
-  constructor(feiSettings: FeiSettings, avatarSettings: AvatarSettings, usernameSettings: UsernameSettings) {
+  constructor(feiSettings: FeiSettings, avatarSettings: AvatarSettings, usernameSettings: UsernameSettings, streamerSettings: StreamerSettings) {
     this.fei = feiSettings;
     this.avatar = avatarSettings;
     this.username = usernameSettings;
+    this.streamer = streamerSettings;
   }
 
   // Dimensions.
