@@ -9,6 +9,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
 
+function createUrl(serverId: string, channelId: string, showStreamerFirst: boolean) {
+  let url = new URL(`https://streamkit.discord.com/overlay/voice/${serverId}/${channelId}`);
+  if (showStreamerFirst) url.searchParams.append('streamer_avatar_first', 'true');
+  return url.toString();
+}
+
 export function OBSSettings() {
   const { t: translate } = useTranslation('translation', { keyPrefix: 'obs' });
   const t = translate as ((s: string, o?: Record<string, string | boolean>) => string);
@@ -19,7 +25,7 @@ export function OBSSettings() {
 
   const content = buildCSS(feignPlayers, viewSettings) + "\n" + buildFeignImageCss();
 
-  const obsURL = `https://streamkit.discord.com/overlay/voice/${serverID}/${channelID}`;
+  const obsURL = createUrl(serverID, channelID, viewSettings.streamer.showStreamerFirst);
   const obsWidth = 1772 + viewSettings.fei.interval * 12;  // should support up to 13 users
   const obsHeight = viewSettings.getHeight();
 

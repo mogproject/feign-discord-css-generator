@@ -101,6 +101,7 @@ const en = {
       flash_color: 'Flash color',
       outline: 'Outline',
       outline_color: 'Outline color',
+      show_my_avatar_first: 'Show my avatar first',
     },
   },
   preview: {

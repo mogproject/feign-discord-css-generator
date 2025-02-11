@@ -101,6 +101,7 @@ const ja = {
       flash_color: '発光色',
       outline: '縁取り',
       outline_color: '縁取り色',
+      show_my_avatar_first: '自分を先頭に表示',
     },
   },
   preview: {

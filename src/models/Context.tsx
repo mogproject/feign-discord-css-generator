@@ -1,5 +1,5 @@
 import React from "react";
-import { AvatarSettings, AvatarShape, FeiSettings, UsernameSettings, ViewSettings } from "./ViewSettings";
+import { AvatarSettings, AvatarShape, FeiSettings, StreamerSettings, UsernameSettings, ViewSettings } from "./ViewSettings";
 import packageJson from '../../package.json'; // Adjust the path as needed
 
 export const APP_VERSION = packageJson.version
@@ -41,6 +41,7 @@ interface Configuration {
   updateFeiSettings: (settings: FeiSettings) => void;
   updateAvatarSettings: (settings: AvatarSettings) => void;
   updateUsernameSettings: (settings: UsernameSettings) => void;
+  updateStreamerSettings: (settings: StreamerSettings) => void;
   isSpeaking: boolean[];
   updateIsSpeaking: (data: boolean[]) => void;
 }
@@ -79,6 +80,10 @@ const defaultUsernameSettings: UsernameSettings = {
   offsetY: 0,
 };
 
+const defaultStreamerSettings: StreamerSettings = {
+  showStreamerFirst: false,
+};
+
 export const defaultConf = {
   channelURL: "",
   serverID: "",
@@ -91,10 +96,11 @@ export const defaultConf = {
   updateDiscordUserEditing: () => { },
   feignPlayers: Array(13).fill(""),
   updateFeignPlayers: () => { },
-  viewSettings: new ViewSettings(defaultFeiSettings, defaultAvatarSettings, defaultUsernameSettings),
+  viewSettings: new ViewSettings(defaultFeiSettings, defaultAvatarSettings, defaultUsernameSettings, defaultStreamerSettings),
   updateFeiSettings: () => { },
   updateAvatarSettings: () => { },
   updateUsernameSettings: () => { },
+  updateStreamerSettings: () => { },
   isSpeaking: [],
   updateIsSpeaking: () => { },
 };
