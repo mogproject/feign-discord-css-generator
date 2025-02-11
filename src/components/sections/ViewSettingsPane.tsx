@@ -48,7 +48,7 @@ export function ViewSettingsPane() {
        */}
       <Container>
         <Row className="mb-3">
-          <Col className="col-6 col-md-2 mb-2 mb-md-0">{t('show_my_avatar_first')}</Col>
+          <Col className="col-6 col-md-4 col-lg-3 col-xl-2 mb-2 mb-md-0">{t('show_my_avatar_first')}</Col>
           <Col className="col-6 col-md-3">
             <Form.Check className="form-switch">
               <Form.Check.Input
